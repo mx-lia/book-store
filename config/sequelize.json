@@ -1,0 +1,8 @@
+{
+    "database": "bookstore",
+    "username": "Julia",
+    "password": "Pa$$w0rd",
+    "host": "localhost",
+    "port": "1433",
+    "dialect": "mssql"
+}
