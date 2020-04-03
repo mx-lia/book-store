@@ -12,7 +12,11 @@ module.exports = (sequelize, type) => {
         availableQuantity: {
             type: type.INTEGER,
             allowNull: false,
-            field: 'available_quantity'
+            field: 'available_quantity',
+            defaultValue: 0,
+            validate: {
+                min: 0
+              }
         },
         price: {
             type: type.DECIMAL(6,2),
