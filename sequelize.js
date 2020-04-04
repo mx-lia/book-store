@@ -17,6 +17,7 @@ const sequelize = new Sequelize(sequelizeConfig.DB_NAME, sequelizeConfig.DB_USER
 });
 
 const Book = require('./models/book')(sequelize, Sequelize);
+const BookCover = require('./models/book-cover')(sequelize, Sequelize);
 const Author = require('./models/author')(sequelize, Sequelize);
 const Publisher = require('./models/publisher')(sequelize, Sequelize);
 const Genre = require('./models/genre')(sequelize, Sequelize);
@@ -25,18 +26,19 @@ const Customer = require('./models/customer')(sequelize, Sequelize);
 const Order = require('./models/order')(sequelize, Sequelize);
 const OrderDetail = require('./models/order-detail')(sequelize, Sequelize);
 
-Book.belongsTo(Author, {foreignKey: {name: 'author'}, as: 'fk_author', onDelete: 'cascade'});
-Book.belongsTo(Publisher, {foreignKey: {name: 'publisher'}, as: 'fk_publisher', onDelete: 'cascade'});
-Book.belongsToMany(Genre, {foreignKey: {name: 'genre'}, through: BookGenre, unique: false, onDelete: 'cascade'});
-Genre.belongsToMany(Book, {foreignKey: {name: 'book'}, through: BookGenre, unique: false, onDelete: 'cascade'});
-Order.belongsTo(Customer, {foreignKey: {name: 'customer'}, as: 'fk_customer', onDelete: 'cascade'});
-Order.belongsToMany(Book, {foreignKey: {name: 'book'}, through: OrderDetail, unique:false, onDelete: 'cascade'});
-Book.belongsToMany(Order, {foreignKey: {name: 'order'}, through: OrderDetail, unique:false, onDelete: 'cascade'});
+Book.belongsTo(Author, {foreignKey: {name: 'author', allowNull: false}, as: 'fk_author', onDelete: 'cascade'});
+Book.belongsTo(Publisher, {foreignKey: {name: 'publisher', allowNull: false}, as: 'fk_publisher', onDelete: 'cascade'});
+Book.belongsToMany(Genre, {foreignKey: {name: 'book'}, through: BookGenre, unique: false, onDelete: 'cascade', onUpdate: 'cascade'});
+Genre.belongsToMany(Book, {foreignKey: {name: 'genre'}, through: BookGenre, unique: false, onDelete: 'cascade', onUpdate: 'cascade'});
+Order.belongsTo(Customer, {foreignKey: {name: 'customer', allowNull: false}, as: 'fk_customer', onDelete: 'cascade'});
+Order.belongsToMany(Book, {foreignKey: {name: 'order'}, through: OrderDetail, unique:false, onDelete: 'cascade', onUpdate: 'cascade'});
+Book.belongsToMany(Order, {foreignKey: {name: 'book'}, through: OrderDetail, unique:false, onDelete: 'cascade', onUpdate: 'cascade'});
+Book.hasOne(BookCover, {foreignKey: {name: 'book', allowNull: false, unique: true}, as: 'fk_book', onDelete: 'cascade'});
 
-sequelize.sync({ force: true })
+/* sequelize.sync({ force: true })
 .then(() => {
     console.log(`Database & tables created!`)
-});
+}); */
 
 module.exports = {
   Book,

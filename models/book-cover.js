@@ -1,28 +1,26 @@
 module.exports = (sequelize, type) => {
-    return sequelize.define('authors', {
+    return sequelize.define('books_covers', {
         id: {
           type: type.INTEGER,
           primaryKey: true,
           autoIncrement: true
         },
-        firstName: {
+        fileName: {
             type: type.STRING(100),
             allowNull: false,
-            field: 'first_name'
+            field: 'file_name'
         },
-        secondName: {
-            type: type.STRING,
+        fileExtension: {
+            type: type.STRING(4),
             allowNull: false,
-            field: 'second_name'
+            field: 'file_extension'
+        },
+        image: {
+            type: type.BLOB,
+            allowNull: false
         }
     },
     {
-        indexes: [
-            {
-                unique: true,
-                fields: ['first_name', 'second_name']
-            }
-        ],
         freezeTableName: true
     });
 }
