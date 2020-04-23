@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+const argon2 = require('argon2');
 const { Customer } = require('../sequelize');
 const JWT_SECRET = require('../config/server-config').JWT_SECRET;
 
@@ -12,10 +12,10 @@ module.exports = {
     remove
 };
 
-async function authenticate ({ login, password }) {
-    const customer = await Customer.findOne({ where: { login: login } });
-    if(customer && bcrypt.compareSync(password, customer.passwordHash)) {
-        const accessToken = jwt.sign({ login: customer.login }, JWT_SECRET, { expiresIn: '20m' });
+async function authenticate ({ email, password }) {
+    const customer = await Customer.findOne({ where: { email: email } });
+    if(customer && await argon2.verify(password, customer.passwordHash)) {
+        const accessToken = jwt.sign({ email: customer.email }, JWT_SECRET, { expiresIn: '20m' });
             return { accessToken };
     }
 }
@@ -29,12 +29,12 @@ async function getById(id) {
 }
 
 async function create(customer) {
-    if (await Customer.findOne({ where: { login: customer.login } })) {
-        throw 'Login "' + customer.login + '" is already taken';
+    if (await Customer.findOne({ where: { email: customer.email } })) {
+        throw 'Email "' + customer.email + '" is already taken';
     }
     const newCustomer = new Customer(customer);
     if (customer.password) {
-        newCustomer.passwordHash = bcrypt.hashSync(customer.password, 10);
+        newCustomer.passwordHash = await argon2.hash(customer.password);
     }
     await newCustomer.save();
 }
@@ -42,11 +42,11 @@ async function create(customer) {
 async function update(id, customerParams) {
     const customer = await Customer.findByPk(id);
     if (!customer) throw 'Customer not found';
-    if (customer.login !== customerParams.login && await Customer.findOne({ where: { login: customerParams.login } })) {
-        throw 'Login "' + customerParams.login + '" is already taken';
+    if (customer.email !== customerParams.email && await Customer.findOne({ where: { email: customerParams.email } })) {
+        throw 'Email "' + customerParams.email + '" is already taken';
     }
     if (customerParams.password) {
-        customerParams.hash = bcrypt.hashSync(customerParams.password, 10);
+        customerParams.hash = await argon2.hash(customerParams.password);
     }
     Object.assign(customer, customerParams);
     await customer.save();

@@ -15,7 +15,7 @@ module.exports = (sequelize, type) => {
             allowNull: false,
             field: 'last_name'
         },
-        login: {
+        email: {
             type: type.STRING(100),
             allowNull: false,
             unique: true

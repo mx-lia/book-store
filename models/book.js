@@ -9,6 +9,10 @@ module.exports = (sequelize, type) => {
             allowNull: false
         },
         edition: type.INTEGER,
+        publicationDate: {
+            type: type.DATE,
+            field: 'publication_date'
+        },
         availableQuantity: {
             type: type.INTEGER,
             allowNull: false,
