@@ -39,9 +39,7 @@ const Login = () => {
               };
               fetch("http://localhost:4000/login", requestOptions)
                 .then((response) => response.json())
-                .then((data) =>
-                  localStorage.setItem("myValueInLocalStorage", data)
-                );
+                .then((data) => localStorage.setItem("token", data));
               actions.setSubmitting(false);
             }}
           >
@@ -89,9 +87,10 @@ const Login = () => {
                 </Form.Row>
                 <Form.Row className="justify-content-center">
                   <a
-                    href="http://twitter.com/"
-                    target="blank"
                     className="social-margin mx-1"
+                    onClick={() => {
+                      window.open("http://localhost:4000/auth/google", "_self");
+                    }}
                   >
                     <div className="social-icon google">
                       <GoogleIcon width="16px" heigth="16px" />
@@ -137,9 +136,7 @@ const Login = () => {
               };
               fetch("http://localhost:4000/register", requestOptions)
                 .then((response) => response.json())
-                .then((data) =>
-                  localStorage.setItem("myValueInLocalStorage", data)
-                );
+                .then((data) => localStorage.setItem("token", data));
               actions.setSubmitting(false);
             }}
           >

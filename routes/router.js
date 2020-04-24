@@ -1,4 +1,5 @@
 const { Router } = require("express");
+const passport = require("passport");
 
 const router = Router();
 
@@ -6,9 +7,34 @@ const customerController = require("../controllers/customer-controller");
 const orderController = require("../controllers/order-controller");
 const bookController = require("../controllers/book-controller");
 
-router.post("/login", customerController.authenticate);
+router.post(
+  "/register",
+  passport.authenticate("register", { session: false }),
+  customerController.authentificate
+);
 
-router.post("/register", customerController.register);
+router.post(
+  "/login",
+  passport.authenticate("register", { session: false }),
+  customerController.authentificate
+);
+
+router.get(
+  "/auth/google",
+  passport.authenticate("google", {
+    session: false,
+    scope: ["email", "profile"],
+  })
+);
+
+router.get(
+  "/auth/google/redirect",
+  passport.authenticate("google", {
+    session: false,
+    scope: ["email", "profile"],
+    successRedirect: "http://localhost:3000/"
+  })
+);
 
 router.get("/customers", customerController.getAll);
 

@@ -1,6 +1,8 @@
 const Sequelize = require('sequelize');
 const sequelizeConfig = require('./config/sequelize-config');
 
+const argon2 = require("argon2");
+
 const sequelize = new Sequelize(sequelizeConfig.DB_NAME, sequelizeConfig.DB_USERNAME, sequelizeConfig.DB_PASSWORD, {
     host: sequelizeConfig.DB_HOST,
     port: sequelizeConfig.DB_PORT,
@@ -34,6 +36,11 @@ Order.belongsTo(Customer, {foreignKey: {name: 'customer', allowNull: false}, as:
 Order.belongsToMany(Book, {foreignKey: {name: 'order'}, through: OrderDetail, unique:false, onDelete: 'cascade', onUpdate: 'cascade'});
 Book.belongsToMany(Order, {foreignKey: {name: 'book'}, through: OrderDetail, unique:false, onDelete: 'cascade', onUpdate: 'cascade'});
 Book.hasOne(BookCover, {foreignKey: {name: 'book', allowNull: false, unique: true}, as: 'fk_book', onDelete: 'cascade'});
+
+Customer.prototype.isValidPassword = async function (password) {
+    const compare = await argon2.verify(this.password, password);
+    return compare;
+  };
 
 /* sequelize.sync({ force: true })
 .then(() => {
