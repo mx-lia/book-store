@@ -1,25 +1,28 @@
 const passport = require("passport");
+
 const localStrategy = require("passport-local").Strategy;
 
-const JWTstrategy = require("passport-jwt").Strategy;
-const ExtractJWT = require("passport-jwt").ExtractJwt;
+const JWTStrategy = require("passport-jwt").Strategy;
 const JWT_SECRET = require("../config/server-config").JWT_SECRET;
 
 const customerService = require("../services/customer-service");
 
 passport.use(
-  "register",
+  "signup",
   new localStrategy(
     {
       usernameField: "email",
       passwordField: "password",
-      passReqToCallback : true
+      passReqToCallback: true,
     },
     async (req, email, password, done) => {
       try {
-        const firstName= req.body.firstName;
-        const lastName= req.body.lastName;
-        const customer = await customerService.create({ firstName, lastName, email, password });
+        const customer = await customerService.create({
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+          email,
+          password,
+        });
         return done(null, customer);
       } catch (error) {
         done(error);
@@ -29,21 +32,21 @@ passport.use(
 );
 
 passport.use(
-  "login",
+  "signin",
   new localStrategy(
     {
       usernameField: "email",
-      passwordField: "password"
+      passwordField: "password",
     },
     async (email, password, done) => {
       try {
         const customer = await customerService.getByEmail(email);
-        if( !customer ){
-          return done(null, false, { message : 'User not found'});
+        if (!customer) {
+          return done(null, false, { message: "User not found" });
         }
         const validate = await customer.isValidPassword(password);
-        if( !validate ){
-          return done(null, false, { message : 'Wrong Password'});
+        if (!validate) {
+          return done(null, false, { message: "Wrong Password" });
         }
         return done(null, customer);
       } catch (error) {
@@ -53,15 +56,24 @@ passport.use(
   )
 );
 
+const cookieExtractor = function(req) {
+  var token = null;
+  if (req && req.cookies) {
+      token = req.cookies['jwt'];
+  }
+  return token;
+};
+
 passport.use(
-  new JWTstrategy(
+  "jwt",
+  new JWTStrategy(
     {
       secretOrKey: JWT_SECRET,
-      jwtFromRequest: ExtractJWT.fromUrlQueryParameter("secret_token"),
+      jwtFromRequest: cookieExtractor,
     },
-    async (token, done) => {
+    async (payload, done) => {
       try {
-        return done(null, token.user);
+        return done(null, payload.user);
       } catch (error) {
         done(error);
       }

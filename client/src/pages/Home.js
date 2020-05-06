@@ -4,13 +4,16 @@ import { Container, Jumbotron, Row, Col } from "react-bootstrap";
 
 import BookCard from "../components/BookCard";
 
+import { getBooks } from "../actions/booksActions";
+
 const Home = () => {
   const [books, setBooks] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:4000/books")
-      .then((response) => response.json())
-      .then((data) => setBooks(data));
+    (async () => {
+      const { books } = await getBooks({ limit: 6, page: 1 });
+      setBooks(books);
+    })();
   }, []);
 
   return (

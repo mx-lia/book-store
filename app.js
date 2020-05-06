@@ -3,18 +3,22 @@ const app = express();
 const bodyParser = require("body-parser");
 const passport = require('passport');
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 const serverConfig = require("./config/server-config");
-const router = require("./routes/router");
-const error = require("./middlewares/error");
+const customerRouter = require("./routes/customer-router");
+const bookRouter = require("./routes/book-router");
+const genreRouter = require("./routes/genre-router");
 
 app.use(passport.initialize());
+app.use(cors());
+app.use(cookieParser());
+app.use(bodyParser.json());
 
 require('./middlewares/jwt-auth');
 require('./middlewares/google-auth');
 
-app.use(cors());
-app.use(bodyParser.json());
-app.use(router);
-app.use(error);
+app.use(customerRouter);
+app.use(bookRouter);
+app.use(genreRouter);
 
 app.listen(serverConfig.PORT);

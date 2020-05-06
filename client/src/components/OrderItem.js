@@ -1,7 +1,7 @@
 import React from "react";
 import { Image } from "react-bootstrap";
 
-import cover from "../assets/books6.jpg";
+import cover from "../assets/books5.jpg";
 
 const OrderItem = () => {
   return (

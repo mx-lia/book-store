@@ -1,35 +1,34 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 
 import { InputGroup, Button, Form } from "react-bootstrap";
 
 import { ReactComponent as AddIcon } from "../assets/add.svg";
 import { ReactComponent as RemoveIcon } from "../assets/remove.svg";
 
-const QuantityControl = () => {
-  const [count, setCount] = useState(1);
+import { Context as ShoppingCartContext } from "../context/shoppingCartContext";
+
+const QuantityControl = ({ book, quantity }) => {
+  const { incrementItem, decrementItem } = useContext(ShoppingCartContext);
+  
   return (
     <InputGroup className="quantity-control">
       <InputGroup.Prepend>
         <Button
           variant="outline-secondary"
           className="d-inline-flex align-items-center"
-          onClick={() => {
-            setCount(count + 1);
-          }}
+          onClick={() => decrementItem(book)}
         >
-          <AddIcon width="16" height="16" />
+          <RemoveIcon width="16" height="16" />
         </Button>
       </InputGroup.Prepend>
-      <Form.Control type="text" value={count} />
+      <Form.Control type="text" value={quantity} />
       <InputGroup.Append>
         <Button
           variant="outline-secondary"
           className="d-inline-flex align-items-center"
-          onClick={() => {
-            setCount(count - 1);
-          }}
+          onClick={() => incrementItem(book)}
         >
-          <RemoveIcon width="16" height="16" />
+          <AddIcon width="16" height="16" />
         </Button>
       </InputGroup.Append>
     </InputGroup>

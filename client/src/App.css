@@ -30,7 +30,9 @@ section,
 .container-fluid {
   width: 93%;
 }
-
+.text-white {
+  color: #fff;
+}
 .btn {
   white-space: nowrap;
 }
@@ -56,7 +58,7 @@ section,
 .text-pink {
   color: #ff0072;
 }
-.basket-panel {
+.basket-panel, .panel-pink {
   background-color: #ff0072;
 }
 .jumbotron {

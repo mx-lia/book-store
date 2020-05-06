@@ -1,12 +1,10 @@
 const customerService = require("../services/customer-service");
 
-const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const JWT_SECRET = require("../config/server-config").JWT_SECRET;
 
 module.exports = {
   authentificate,
-  getAll,
   getById,
   update,
   remove,
@@ -16,26 +14,27 @@ function authentificate(req, res, next) {
   try {
     req.login(req.user, { session: false }, async (error) => {
       if (error) return next(error);
-      const body = { id: req.user.id, email: req.user.email };
-      const token = jwt.sign({ customer: body }, JWT_SECRET);
-      return res.json({ token });
+      const customer = req.user;
+      const body = { id: customer.id, email: customer.email };
+      const token = jwt.sign({ user: body }, JWT_SECRET);
+      let options = {
+        maxAge: 1000 * 60 * 30,
+        httpOnly: true,
+        signed: false,
+      };
+      return res.cookie("jwt", token, options).redirect("http://localhost:3000/");
     });
   } catch (error) {
     return next(error);
   }
 }
 
-function getAll(req, res, next) {
-  customerService
-    .getAll()
-    .then((customers) => res.json(customers))
-    .catch((err) => next(err));
-}
-
 function getById(req, res, next) {
   customerService
-    .getById(req.params.id)
-    .then((customer) => (customer ? res.json(customer) : res.sendStatus(404)))
+    .getById(req.user.id)
+    .then((customer) =>
+      customer ? res.status(200).json(customer) : res.sendStatus(404)
+    )
     .catch((err) => next(err));
 }
 

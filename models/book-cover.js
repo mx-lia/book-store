@@ -5,15 +5,10 @@ module.exports = (sequelize, type) => {
           primaryKey: true,
           autoIncrement: true
         },
-        fileName: {
-            type: type.STRING(100),
+        contentType: {
+            type: type.STRING(10),
             allowNull: false,
-            field: 'file_name'
-        },
-        fileExtension: {
-            type: type.STRING(4),
-            allowNull: false,
-            field: 'file_extension'
+            field: 'content_type'
         },
         image: {
             type: type.BLOB,

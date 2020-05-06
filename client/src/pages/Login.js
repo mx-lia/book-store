@@ -1,12 +1,16 @@
-import React from "react";
+import React, {useContext} from "react";
 
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { Formik } from "formik";
 import * as yup from "yup";
 
+import { Link } from "react-router-dom";
+
 import { ReactComponent as TwitterIcon } from "../assets/twitter.svg";
 import { ReactComponent as FacebookIcon } from "../assets/facebook.svg";
 import { ReactComponent as GoogleIcon } from "../assets/google.svg";
+
+import { Context as AuthContext } from "../context/authContext";
 
 const registerSchema = yup.object({
   firstName: yup.string().required(),
@@ -21,6 +25,8 @@ const loginSchema = yup.object({
 });
 
 const Login = () => {
+  const { signIn, signUp } = useContext(AuthContext);
+
   return (
     <Container fluid as="main" className="my-3" role="main">
       <Row className="mx-0 justify-content-center">
@@ -31,15 +37,8 @@ const Login = () => {
               password: "",
             }}
             validationSchema={loginSchema}
-            onSubmit={(values, actions) => {
-              const requestOptions = {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(values),
-              };
-              fetch("http://localhost:4000/login", requestOptions)
-                .then((response) => response.json())
-                .then((data) => localStorage.setItem("token", data));
+            onSubmit={async (values, actions) => {
+              await signIn(values);
               actions.setSubmitting(false);
             }}
           >
@@ -86,7 +85,7 @@ const Login = () => {
                   <hr />
                 </Form.Row>
                 <Form.Row className="justify-content-center">
-                  <a
+                  <Link
                     className="social-margin mx-1"
                     onClick={() => {
                       window.open("http://localhost:4000/auth/google", "_self");
@@ -95,12 +94,8 @@ const Login = () => {
                     <div className="social-icon google">
                       <GoogleIcon width="16px" heigth="16px" />
                     </div>
-                  </a>
-                  <a
-                    href="http://twitter.com/"
-                    target="blank"
-                    className="social-margin mx-1"
-                  >
+                  </Link>
+                  <a href="http://twitter.com/" className="social-margin mx-1">
                     <div className="social-icon twitter">
                       <TwitterIcon width="16px" heigth="16px" />
                     </div>
@@ -128,15 +123,8 @@ const Login = () => {
               password: "",
             }}
             validationSchema={registerSchema}
-            onSubmit={(values, actions) => {
-              const requestOptions = {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(values),
-              };
-              fetch("http://localhost:4000/register", requestOptions)
-                .then((response) => response.json())
-                .then((data) => localStorage.setItem("token", data));
+            onSubmit={async (values, actions) => {
+              await signUp(values);
               actions.setSubmitting(false);
             }}
           >

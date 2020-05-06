@@ -10,7 +10,7 @@ module.exports = (sequelize, type) => {
         },
         edition: type.INTEGER,
         publicationDate: {
-            type: type.DATE,
+            type: type.DATEONLY,
             field: 'publication_date'
         },
         availableQuantity: {
