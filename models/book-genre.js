@@ -1,5 +1,9 @@
 module.exports = (sequelize, type) => {
-    return sequelize.define('books_genres', {}, {
-        freezeTableName: true
-    });
-}
+  return sequelize.define(
+    "books_genres",
+    {},
+    {
+      freezeTableName: true,
+    }
+  );
+};

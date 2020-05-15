@@ -4,7 +4,7 @@ import { Container, Jumbotron, Row, Col } from "react-bootstrap";
 
 import BookCard from "../components/BookCard";
 
-import { getBooks } from "../actions/booksActions";
+import { getBooks } from "../actions/bookActions";
 
 const Home = () => {
   const [books, setBooks] = useState([]);

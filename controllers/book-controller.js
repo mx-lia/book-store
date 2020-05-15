@@ -29,14 +29,14 @@ function getByIsbn(req, res, next) {
 
 function create(req, res, next) {
   bookService
-    .create(req.body)
+    .create(req.body, req.files)
     .then(() => res.json({}))
     .catch((err) => next(err));
 }
 
 function update(req, res, next) {
   bookService
-    .update(req.params.isbn, req.body)
+    .update(req.params.isbn, req.body, req.files)
     .then(() => res.json({}))
     .catch((err) => next(err));
 }

@@ -1,8 +1,6 @@
+const argon2 = require("argon2");
 const Sequelize = require("sequelize");
 const sequelizeConfig = require("./config/sequelize-config");
-
-const argon2 = require("argon2");
-
 const sequelize = new Sequelize(
   sequelizeConfig.DB_NAME,
   sequelizeConfig.DB_USERNAME,
@@ -87,18 +85,10 @@ Customer.prototype.isValidPassword = async function (password) {
   return compare;
 };
 
-var fs = require("fs");
-
-/*   var imageData = fs.readFileSync(`4.jpg`);
-  BookCover.create({
-    image: imageData,
-    contentType: "image/jpg",
-    book_isbn: "978-58-79768-35-0"
-  }); */
-
-/* sequelize.sync({ force: true }).then(() => {
-  console.log(`Database & tables created!`);
-}); */
+/* sequelize
+  .sync({ force: true })
+  .then((result) => {})
+  .catch((err) => console.log(err)); */
 
 module.exports = {
   Book,
@@ -109,4 +99,5 @@ module.exports = {
   Customer,
   Order,
   OrderDetail,
+  BookCover,
 };

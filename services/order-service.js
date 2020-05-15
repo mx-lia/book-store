@@ -1,35 +1,54 @@
-const { Order, OrderDetail } = require('../sequelize');
+const { Order, OrderDetail, Customer } = require("../sequelize");
 
 module.exports = {
-    getAll,
-    getById,
-    create,
-    update,
-    remove
+  getAll,
+  getByCustomerId,
+  create,
+  update,
+  remove,
 };
 
 async function getAll() {
-    return await Order.findAll();
+  return await Order.findAll();
 }
 
-async function getById(id) {
-    return await Order.findByPk(id);
+async function getByCustomerId(customerId) {
+  let orders = await Order.findAll({ where: { customer_id: customerId } });
+  for (const [index, order] of orders.entries()) {
+    const orderDetail = await OrderDetail.findAll({
+      where: { order: order.id },
+    });
+    orders[index] = {
+      ...orders[index].dataValues,
+      details: orderDetail.map((el) => el.dataValues),
+    };
+  }
+  return orders;
 }
 
-async function create(order) {
-    const newOrder = new Order(order);
-    await newOrder.save();
-    const newOrderDetail = new OrderDetail({book: order.book, order: newOrder.id, amount: order.amount});
+async function create({ customer, books }) {
+  await Customer.update(customer, {
+    where: { id: customer.id },
+  });
+  let newOrder = new Order({ customer_id: customer.id, date: new Date() });
+  newOrder = await newOrder.save();
+  books.map(async (element) => {
+    const newOrderDetail = new OrderDetail({
+      book: element.isbn,
+      order: newOrder.id,
+      amount: element.amount,
+    });
     await newOrderDetail.save();
+  });
 }
 
 async function update(id, orderParams) {
-    const order = await Order.findByPk(id);
-    if (!order) throw 'Order not found';
-    Object.assign(order, orderParams);
-    await order.save();
+  const order = await Order.findByPk(id);
+  if (!order) throw "Order not found";
+  Object.assign(order, orderParams);
+  await order.save();
 }
 
 async function remove(id) {
-    await Order.destroy({ where: { id } });
+  await Order.destroy({ where: { id } });
 }

@@ -23,7 +23,7 @@ function getById(req, res, next) {
 
 function create(req, res, next) {
     publisherService.create(req.body)
-        .then(() => res.json({}))
+        .then((publisher) => res.json(publisher))
         .catch(err => next(err));
 }
 

@@ -1,0 +1,350 @@
+import React, { useState, useEffect } from "react";
+
+import {
+  Row,
+  Col,
+  Form,
+  FormControl,
+  Button,
+  InputGroup,
+  Image,
+} from "react-bootstrap";
+
+import { Formik } from "formik";
+import { initialValues, bookSchema } from "./form-config";
+
+import { getGenres, createGenre } from "../../actions/genreActions";
+import { getAuthors, createAuthor } from "../../actions/authorActions";
+import { getPublishers, createPublisher } from "../../actions/publisherActions";
+import {
+  deleteBook,
+  updateBook,
+  createBook,
+  getBook,
+} from "../../actions/bookActions";
+
+import noImage from "../../assets/noimage.png";
+
+import DatePicker from "./form-components/DatePicker";
+import Select from "./form-components/Select";
+import makeAnimated from "react-select/animated";
+
+const BookForm = ({ isbn }) => {
+  const animatedComponents = makeAnimated();
+  const [book, setBook] = useState(initialValues);
+  const [genres, setGenres] = useState([]);
+  const [authors, setAuthors] = useState([]);
+  const [publishers, setPublishers] = useState([]);
+  const [cover, setCover] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      setGenres(await getGenres());
+      setAuthors(await getAuthors());
+      setPublishers(await getPublishers());
+      if (isbn) {
+        const newValues = await getBook(isbn);
+        delete newValues.publisher_id;
+        delete newValues.author_id;
+        setBook({
+          ...newValues,
+          publisher: {
+            label: newValues.publisher.name,
+            value: newValues.publisher.id,
+          },
+          author: {
+            label: `${newValues.author.firstName} ${newValues.author.lastName}`,
+            value: newValues.author.id,
+          },
+          genres: newValues.genres.map((genre) => {
+            return { label: genre.name, value: genre.id };
+          }),
+        });
+        setCover(newValues.src);
+      }
+    })();
+  }, []);
+
+  return (
+    <Row className="my-3">
+      <Col>
+        <div className="panel shadow-sm">
+          <Formik
+            onSubmit={async (values) => {
+              let res;
+              if (isbn) res = await updateBook(values);
+              else res = await createBook(values);
+            }}
+            initialValues={book}
+            validationSchema={bookSchema}
+            enableReinitialize={true}
+          >
+            {({
+              handleSubmit,
+              handleChange,
+              setFieldValue,
+              values,
+              errors,
+            }) => (
+              <Form
+                noValidate
+                autoComplete="false"
+                onSubmit={handleSubmit}
+                className="p-3"
+              >
+                <Form.Row className="justify-content-between">
+                  <Col xs="auto">
+                    <h5 className="m-0">Information</h5>
+                  </Col>
+                  {isbn && (
+                    <Col xs="auto" className="ml-auto">
+                      <Button
+                        variant="outline-danger"
+                        onClick={async () => {
+                          deleteBook(values.isbn);
+                          window.location.href = "/admin/dashboard";
+                        }}
+                      >
+                        delete this book
+                      </Button>
+                    </Col>
+                  )}
+                  <Col xs="auto">
+                    <Button type="submit">Save</Button>
+                  </Col>
+                </Form.Row>
+                <Form.Row className="justify-content-around">
+                  <Form.Group
+                    as={Col}
+                    xs={12}
+                    sm={4}
+                    md={3}
+                    xl={2}
+                    className="d-flex flex-column justify-content-between"
+                  >
+                    <Image
+                      src={cover ? cover : noImage}
+                      fluid
+                      className="my-auto py-2"
+                    />
+                    <Form.File
+                      name="cover"
+                      label="Custom file input"
+                      custom
+                      onChange={(event) => {
+                        setCover(URL.createObjectURL(event.target.files[0]));
+                        setFieldValue("cover", event.currentTarget.files[0]);
+                      }}
+                    />
+                  </Form.Group>
+                  <Col
+                    xs={12}
+                    sm={7}
+                    md={8}
+                    xl={9}
+                    className="d-flex flex-column justify-content-between"
+                  >
+                    <Form.Row>
+                      <Form.Group as={Col}>
+                        <Form.Label>ISBN</Form.Label>
+                        <Form.Control
+                          name="isbn"
+                          type="text"
+                          placeholder="ISBN"
+                          value={values.isbn}
+                          onChange={handleChange}
+                          isInvalid={!!errors.isbn}
+                          readOnly={isbn ? true : false}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                          {errors.isbn}
+                        </Form.Control.Feedback>
+                      </Form.Group>
+                      <Form.Group as={Col}>
+                        <Form.Label>Genres </Form.Label>
+                        <Select
+                          id="genres"
+                          name="genres"
+                          value={values.genres}
+                          errors={errors.genres}
+                          items={genres}
+                          setItems={setGenres}
+                          createItem={createGenre}
+                          closeMenuOnSelect={false}
+                          isMulti
+                          options={genres.map((element) => ({
+                            value: element.id,
+                            label: element.name,
+                          }))}
+                        />
+                      </Form.Group>
+                    </Form.Row>
+                    <Form.Group>
+                      <Form.Label>Title</Form.Label>
+                      <Form.Control
+                        name="title"
+                        type="text"
+                        placeholder="Title"
+                        value={values.title}
+                        onChange={handleChange}
+                        isInvalid={!!errors.title}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.title}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                    <Form.Row>
+                      <Form.Group as={Col} xs sm={12} md xl>
+                        <div className="d-flex justify-content-between">
+                          <Form.Label>Author</Form.Label>
+                        </div>
+                        <Select
+                          id="author"
+                          name="author"
+                          value={values.author}
+                          items={authors}
+                          setItems={setAuthors}
+                          createItem={createAuthor}
+                          errors={errors.author}
+                          components={animatedComponents}
+                          options={authors.map((element) => ({
+                            value: element.id,
+                            label: `${element.firstName} ${element.lastName}`,
+                          }))}
+                        />
+                      </Form.Group>
+                      <Form.Group as={Col} xs sm={12} md xl>
+                        <Form.Label>Publisher</Form.Label>
+                        <Select
+                          id="publisher"
+                          name="publisher"
+                          value={values.publisher}
+                          items={publishers}
+                          setItems={setPublishers}
+                          createItem={createPublisher}
+                          errors={errors.publisher}
+                          components={animatedComponents}
+                          options={publishers.map((element) => ({
+                            value: element.id,
+                            label: element.name,
+                          }))}
+                        />
+                      </Form.Group>
+                    </Form.Row>
+                    <Form.Row>
+                      <Form.Group as={Col}>
+                        <Form.Label>Language</Form.Label>
+                        <Form.Control
+                          name="language"
+                          type="text"
+                          placeholder="Language"
+                          value={values.language}
+                          onChange={handleChange}
+                          isInvalid={!!errors.language}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                          {errors.language}
+                        </Form.Control.Feedback>
+                      </Form.Group>
+                      <Form.Group as={Col}>
+                        <Form.Label>Publication date</Form.Label>
+                        <DatePicker
+                          name="publicationDate"
+                          errors={errors.publicationDate}
+                        />
+                      </Form.Group>
+                    </Form.Row>
+                    <Form.Row>
+                      <Form.Group as={Col}>
+                        <Form.Label>Format</Form.Label>
+                        <Form.Control
+                          name="format"
+                          type="text"
+                          placeholder="Format"
+                          value={values.format}
+                          onChange={handleChange}
+                          isInvalid={!!errors.format}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                          {errors.format}
+                        </Form.Control.Feedback>
+                      </Form.Group>
+                      <Form.Group as={Col}>
+                        <Form.Label>Pages</Form.Label>
+                        <Form.Control
+                          name="pages"
+                          type="text"
+                          placeholder="Pages"
+                          value={values.pages}
+                          onChange={handleChange}
+                          isInvalid={!!errors.pages}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                          {errors.pages}
+                        </Form.Control.Feedback>
+                      </Form.Group>
+                    </Form.Row>
+                    <Form.Row>
+                      <Form.Group as={Col}>
+                        <Form.Label>Price</Form.Label>
+                        <InputGroup>
+                          <InputGroup.Prepend>
+                            <InputGroup.Text>$</InputGroup.Text>
+                          </InputGroup.Prepend>
+                          <FormControl
+                            name="price"
+                            type="text"
+                            value={values.price}
+                            onChange={handleChange}
+                            isInvalid={!!errors.price}
+                          />
+                          <Form.Control.Feedback type="invalid">
+                            {errors.price}
+                          </Form.Control.Feedback>
+                        </InputGroup>
+                      </Form.Group>
+                      <Form.Group as={Col}>
+                        <Form.Label>Quantity</Form.Label>
+                        <InputGroup>
+                          <InputGroup.Prepend>
+                            <InputGroup.Text>$</InputGroup.Text>
+                          </InputGroup.Prepend>
+                          <FormControl
+                            name="availableQuantity"
+                            type="text"
+                            value={values.availableQuantity}
+                            onChange={handleChange}
+                            isInvalid={!!errors.availableQuantity}
+                          />
+                          <Form.Control.Feedback type="invalid">
+                            {errors.availableQuantity}
+                          </Form.Control.Feedback>
+                        </InputGroup>
+                      </Form.Group>
+                    </Form.Row>
+                  </Col>
+                </Form.Row>
+                <Form.Group>
+                  <Form.Label>Description</Form.Label>
+                  <Form.Control
+                    name="description"
+                    as="textarea"
+                    rows="10"
+                    value={values.description}
+                    onChange={handleChange}
+                    isInvalid={!!errors.description}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.description}
+                  </Form.Control.Feedback>
+                </Form.Group>
+              </Form>
+            )}
+          </Formik>
+        </div>
+      </Col>
+    </Row>
+  );
+};
+
+export default BookForm;

@@ -1,4 +1,4 @@
-const { Book, BookGenre } = require("../sequelize");
+const { Book, BookGenre, BookCover } = require("../sequelize");
 
 module.exports = {
   getAll,
@@ -29,7 +29,7 @@ async function getAll(limit, page, genre, orderBy) {
     ],
   });
   let offset = 0;
-  let pages = Math.ceil(data.count / limit);
+  let pages = Math.ceil(data.rows.length / limit);
   offset = limit * (page - 1);
   const books = await Book.findAll({
     limit: limit,
@@ -42,7 +42,7 @@ async function getAll(limit, page, genre, orderBy) {
     ],
     order: [orderBy ? orderBy : ["title", "ASC"]],
   });
-  return { books: books, count: data.count, pages: pages };
+  return { books: books, count: data.rows.length, pages: pages };
 }
 
 async function getByIsbn(isbn) {
@@ -51,20 +51,51 @@ async function getByIsbn(isbn) {
   });
 }
 
-async function create(book) {
-  const newBook = new Book(book);
-  await newBook.save();
-  const newBookGenre = new BookGenre({ book: book.isbn, genre: book.genre });
-  await newBookGenre.save();
+async function create(book, files) {
+  let newBook = new Book(book);
+  newBook = await newBook.save();
+  Array.isArray(book.genres)
+    ? book.genres.map(
+        async (id) => await BookGenre.create({ book: newBook.isbn, genre: id })
+      )
+    : await BookGenre.create({ book: newBook.isbn, genre: book.genres });
+  if (files) {
+    await BookCover.create({
+      contentType: files.cover.mimetype,
+      image: files.cover.data,
+      book_isbn: newBook.isbn,
+    });
+  }
 }
 
-async function update(isbn, bookParams) {
+async function update(isbn, updatedBook, files) {
   const book = await Book.findByPk(isbn);
-  if (!book) throw "Book not found";
-  Object.assign(book, bookParams);
+  Object.assign(book, updatedBook);
+  await BookGenre.destroy({ where: { book: book.isbn } });
+  Array.isArray(updatedBook.genres)
+    ? updatedBook.genres.map((genre) =>
+        BookGenre.create({ genre: genre, book: book.isbn })
+      )
+    : BookGenre.create({ genre: updatedBook.genres, book: book.isbn });
   await book.save();
+  if (files) {
+    const cover = await BookCover.findOne({ where: { book_isbn: book.isbn } });
+    if (cover) {
+      Object.assign(cover, {
+        contentType: files.cover.mimetype,
+        image: files.cover.data,
+      });
+      await cover.save();
+    } else {
+      await BookCover.create({
+        contentType: files.cover.mimetype,
+        image: files.cover.data,
+        book_isbn: book.isbn,
+      });
+    }
+  }
 }
 
 async function remove(isbn) {
-  await Book.destroy({ where: { id: isbn } });
+  await Book.destroy({ where: { isbn: isbn } });
 }

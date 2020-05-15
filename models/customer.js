@@ -1,4 +1,5 @@
 const argon2 = require("argon2");
+const rolesConfig = require("../config/roles-config");
 
 module.exports = (sequelize, type) => {
   return sequelize.define(
@@ -8,6 +9,10 @@ module.exports = (sequelize, type) => {
         type: type.INTEGER,
         primaryKey: true,
         autoIncrement: true,
+      },
+      role: {
+        type: type.INTEGER,
+        defaultValue: rolesConfig.CUSTOMER_ROLES.user,
       },
       firstName: {
         type: type.STRING(100),
@@ -29,18 +34,20 @@ module.exports = (sequelize, type) => {
         type: type.STRING(6),
         field: "postal_code",
       },
-      street: {
-        type: type.STRING(100),
-      },
-      buldingNo: {
-        type: type.STRING(5),
-      },
-      flatNo: type.STRING(5),
-      city: {
-        type: type.STRING(100),
-      },
+      country: type.STRING(50),
+      city: type.STRING(50),
+      street: type.STRING(100),
+      buildingNo: type.INTEGER,
+      flatNo: type.INTEGER,
       phoneNumber: {
         type: type.STRING(9),
+        validate: {
+          isOnlyDigits(value) {
+            if (!parseInt(value)) {
+              throw new Error("Phone number must contain only digits.");
+            }
+          },
+        },
       },
     },
     {

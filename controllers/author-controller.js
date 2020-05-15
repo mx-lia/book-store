@@ -23,7 +23,7 @@ function getById(req, res, next) {
 
 function create(req, res, next) {
     authorService.create(req.body)
-        .then(() => res.json({}))
+        .then((author) => res.json(author))
         .catch(err => next(err));
 }
 

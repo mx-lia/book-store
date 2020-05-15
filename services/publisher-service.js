@@ -18,7 +18,7 @@ async function getById(id) {
 
 async function create(publisher) {
     const newPublisher = new Publisher(publisher);
-    await newPublisher.save();
+    return await newPublisher.save();
 }
 
 async function update(id, publisherParams) {

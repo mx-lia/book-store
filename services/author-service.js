@@ -18,7 +18,7 @@ async function getById(id) {
 
 async function create(author) {
     const newAuthor = new Author(author);
-    await newAuthor.save();
+    return await newAuthor.save();
 }
 
 async function update(id, authorParams) {

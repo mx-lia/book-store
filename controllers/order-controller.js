@@ -2,7 +2,7 @@ const orderService = require('../services/order-service');
 
 module.exports = {
     getAll,
-    getById,
+    getByCustomerId,
     create,
     update,
     remove
@@ -14,9 +14,9 @@ function getAll(req, res, next) {
         .catch(err => next(err));
 }
 
-function getById(req, res, next) {
-    orderService.getById(req.params.id)
-        .then(order => order ? res.json(order) : res.sendStatus(404))
+function getByCustomerId(req, res, next) {
+    orderService.getByCustomerId(req.user.id)
+        .then(result => result ? res.json(result) : res.sendStatus(404))
         .catch(err => next(err));
 }
 

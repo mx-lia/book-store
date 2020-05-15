@@ -10,7 +10,7 @@ import {
 const books = localStorage.getItem("shoppingCart");
 
 export const initialState = {
-  isEmpty: books ? true : false,
+  isEmpty: books ? false : true,
   books: books ? JSON.parse(books) : [],
   totalCount: 0,
   totalSum: 0.0,

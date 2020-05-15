@@ -15,7 +15,7 @@ const BookCard = ({ book }) => {
           <Card.Title as="h6">{book.title}</Card.Title>
           <div className="mb-3">
             <span>{book.author.firstName} </span>
-            <span>{book.author.secondName}</span>
+            <span>{book.author.lastName}</span>
             <br />
             <span>{book.publicationDate}</span>
             <br />

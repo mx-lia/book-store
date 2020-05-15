@@ -1,7 +1,7 @@
-export default function serverCall(endpoint, { body, ...customConfig } = {}) {
+export default function serverCall(endpoint, { body, header: method, ...customConfig } = {}) {
   const headers = { "content-type": "application/json" };
   const config = {
-    method: body ? "POST" : "GET",
+    method: method? method: body ? "POST" : "GET",
     ...customConfig,
     headers: {
       ...headers,

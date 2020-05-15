@@ -11,8 +11,8 @@ import { ReactComponent as ArrowUpIcon } from "../assets/arrow_up.svg";
 import BookCard from "../components/BookCard";
 import Pagination from "../components/Pagination";
 
-import { getBooks } from "../actions/booksActions";
-import { getGenres } from "../actions/genresActions";
+import { getBooks } from "../actions/bookActions";
+import { getGenres } from "../actions/genreActions";
 
 const Books = () => {
   const location = useLocation();
@@ -83,17 +83,6 @@ const Books = () => {
                   </option>
                   <option>Pre-order</option>
                   <option>In stock</option>
-                </Form.Control>
-              </Form.Group>
-              <Form.Group>
-                <Form.Label>Language</Form.Label>
-                <Form.Control as="select" size="sm" custom required>
-                  <option selected disabled>
-                    All
-                  </option>
-                  <option>Russian</option>
-                  <option>English</option>
-                  <option>Spanish</option>
                 </Form.Control>
               </Form.Group>
               <Button type="submit" className="w-100">

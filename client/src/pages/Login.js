@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { Formik } from "formik";
@@ -10,7 +10,7 @@ import { ReactComponent as TwitterIcon } from "../assets/twitter.svg";
 import { ReactComponent as FacebookIcon } from "../assets/facebook.svg";
 import { ReactComponent as GoogleIcon } from "../assets/google.svg";
 
-import { Context as AuthContext } from "../context/authContext";
+import { Context as CustomerContext } from "../context/customerContext";
 
 const registerSchema = yup.object({
   firstName: yup.string().required(),
@@ -25,7 +25,7 @@ const loginSchema = yup.object({
 });
 
 const Login = () => {
-  const { signIn, signUp } = useContext(AuthContext);
+  const { signIn, signUp } = useContext(CustomerContext);
 
   return (
     <Container fluid as="main" className="my-3" role="main">
@@ -42,41 +42,41 @@ const Login = () => {
               actions.setSubmitting(false);
             }}
           >
-            {({
-              handleChange,
-              handleSubmit,
-              handleBlur,
-              values,
-              touched,
-              isValid,
-              errors,
-              isSubmitting,
-            }) => (
+            {({ handleChange, handleSubmit, values, errors, isSubmitting }) => (
               <Form className="p-2 p-md-4" noValidate onSubmit={handleSubmit}>
                 <h5 className="my-3">Sign In</h5>
-                <Form.Group controlId="formBasicEmail">
+                <Form.Group>
                   <Form.Label>Email address</Form.Label>
                   <Form.Control
                     type="email"
                     name="email"
                     value={values.email}
                     onChange={handleChange}
-                    isValid={touched.email && !errors.email}
-                    placeholder="Enter email"
+                    isInvalid={!!errors.email}
                   />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.email}
+                  </Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group controlId="formBasicPassword">
+                <Form.Group>
                   <Form.Label>Password</Form.Label>
                   <Form.Control
                     type="password"
                     name="password"
                     value={values.password}
                     onChange={handleChange}
-                    isValid={touched.password && !errors.password}
-                    placeholder="Password"
+                    isInvalid={!!errors.password}
                   />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.password}
+                  </Form.Control.Feedback>
                 </Form.Group>
-                <Button variant="primary" type="submit" className="w-100 my-3">
+                <Button
+                  variant="primary"
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-100 my-3"
+                >
                   Sign in
                 </Button>
                 <Form.Row>
@@ -128,61 +128,60 @@ const Login = () => {
               actions.setSubmitting(false);
             }}
           >
-            {({
-              handleChange,
-              handleSubmit,
-              handleBlur,
-              values,
-              touched,
-              isValid,
-              errors,
-              isSubmitting,
-            }) => (
+            {({ handleChange, handleSubmit, values, errors, isSubmitting }) => (
               <Form className="p-2 p-md-4" noValidate onSubmit={handleSubmit}>
                 <h5 className="my-3">Join</h5>
-                <Form.Group controlId="formBasicFirstName">
+                <Form.Group>
                   <Form.Label>First Name</Form.Label>
                   <Form.Control
                     type="text"
                     name="firstName"
                     value={values.firstName}
                     onChange={handleChange}
-                    isValid={touched.firstName && !errors.firstName}
-                    placeholder="First Name"
+                    isInvalid={!!errors.firstName}
                   />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.firstName}
+                  </Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group controlId="formBasicLastName">
+                <Form.Group>
                   <Form.Label>Last Name</Form.Label>
                   <Form.Control
                     type="text"
                     name="lastName"
                     value={values.lastName}
                     onChange={handleChange}
-                    isValid={touched.lastName && !errors.lastName}
-                    placeholder="Last Name"
+                    isInvalid={!!errors.lastName}
                   />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.lastName}
+                  </Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group controlId="formBasicEmail">
+                <Form.Group>
                   <Form.Label>Email address</Form.Label>
                   <Form.Control
                     type="email"
                     name="email"
                     value={values.email}
                     onChange={handleChange}
-                    isValid={touched.email && !errors.email}
-                    placeholder="Enter email"
+                    isInvalid={!!errors.email}
                   />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.email}
+                  </Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group controlId="formBasicPassword">
+                <Form.Group>
                   <Form.Label>Password</Form.Label>
                   <Form.Control
                     type="password"
                     name="password"
                     value={values.password}
                     onChange={handleChange}
-                    isValid={touched.password && !errors.password}
-                    placeholder="Password"
+                    isInvalid={!!errors.password}
                   />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.password}
+                  </Form.Control.Feedback>
                 </Form.Group>
                 <Button
                   variant="primary"

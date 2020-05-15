@@ -18,7 +18,7 @@ async function getById(id) {
 
 async function create(genre) {
     const newGenre = new Genre(genre);
-    await newGenre.save();
+    return await newGenre.save();
 }
 
 async function update(id, genreParams) {

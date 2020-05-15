@@ -22,7 +22,7 @@ function getById(req, res, next) {
 
 function create(req, res, next) {
     genreService.create(req.body)
-        .then(() => res.json({}))
+        .then((genre) => res.json(genre))
         .catch(err => next(err));
 }
 

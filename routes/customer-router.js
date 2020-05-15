@@ -1,5 +1,7 @@
 const { Router } = require("express");
 const passport = require("passport");
+const rolesConfig = require("../config/roles-config");
+const { allowOnly } = require("../middlewares/role-check");
 
 const router = Router();
 
@@ -60,7 +62,7 @@ router.get(
 router.get(
   "/customer",
   passport.authenticate("jwt", { session: false }),
-  customerController.getById
+  allowOnly(rolesConfig.ACCESS_LEVELS.user, customerController.getById)
 );
 
 router.put(
