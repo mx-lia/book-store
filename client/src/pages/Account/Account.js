@@ -26,13 +26,13 @@ const Account = () => {
               >
                 Personal Info
               </ListGroup.Item>
-              <ListGroup.Item
+{/*               <ListGroup.Item
                 action
                 href="/account/favorites"
                 className="px-0 py-1"
               >
                 Favorites
-              </ListGroup.Item>
+              </ListGroup.Item> */}
               <ListGroup.Item
                 action
                 href="/account/history"
@@ -50,11 +50,11 @@ const Account = () => {
               path="/account/personal"
               component={PersonalInfo}
             />
-            <UserPrivateRoute
+{/*             <UserPrivateRoute
               exact
               path="/account/favorites"
               component={Favorites}
-            />
+            /> */}
             <UserPrivateRoute
               exact
               path="/account/history"

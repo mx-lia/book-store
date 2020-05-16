@@ -1,4 +1,6 @@
 const { Book, BookGenre, BookCover } = require("../sequelize");
+const sequelize = require("sequelize");
+const { Op } = require("sequelize");
 
 module.exports = {
   getAll,
@@ -8,7 +10,15 @@ module.exports = {
   remove,
 };
 
-async function getAll(limit, page, genre, orderBy) {
+async function getAll(
+  limit,
+  page,
+  genre,
+  orderBy,
+  keyword,
+  price,
+  availabitity
+) {
   switch (orderBy) {
     case "pubdate_old_new":
       orderBy = ["publication_date", "DESC"];
@@ -22,9 +32,170 @@ async function getAll(limit, page, genre, orderBy) {
     case "price_low_high":
       orderBy = ["price", "ASC"];
       break;
+    default:
+      orderBy = undefined;
+      break;
   }
+
+  switch (price) {
+    case "low":
+      price = { [Op.lt]: 15 };
+      break;
+    case "med":
+      price = { [Op.in]: [15, 30] };
+      break;
+    case "high":
+      price = { [Op.gt]: 30 };
+      break;
+    default:
+      price = undefined;
+      break;
+  }
+
+  switch (availabitity) {
+    case "in_stock":
+      availabitity = { [Op.gt]: 0 };
+      break;
+    case "out_of_stock":
+      availabitity = 0;
+      break;
+    default:
+      availabitity = undefined;
+      break;
+  }
+
+  if (keyword) keyword = keyword.replace(/\s+/g, "").toLowerCase();
+
+  const options = {
+    [Op.and]: [
+      keyword
+        ? sequelize.where(
+            sequelize.fn(
+              "replace",
+              sequelize.fn("lower", sequelize.col("books.title")),
+              " ",
+              ""
+            ),
+            {
+              [Op.or]: {
+                [Op.substring]: keyword,
+                [Op.startsWith]: keyword,
+                [Op.endsWith]: keyword,
+                [Op.eq]: keyword,
+              },
+            }
+          )
+        : {},
+      price ? { "$books.price$": price } : {},
+      availabitity != undefined
+        ? {
+            "$books.available_quantity$": availabitity,
+          }
+        : {},
+    ],
+  };
+
+  const authorOptions = {
+    [Op.or]: [
+      keyword
+        ? sequelize.where(
+            sequelize.fn(
+              "replace",
+              sequelize.fn("lower", sequelize.col("first_name")),
+              " ",
+              ""
+            ),
+            {
+              [Op.or]: {
+                [Op.substring]: keyword,
+                [Op.startsWith]: keyword,
+                [Op.endsWith]: keyword,
+                [Op.eq]: keyword,
+              },
+            }
+          )
+        : {},
+      keyword
+        ? sequelize.where(
+            sequelize.fn(
+              "replace",
+              sequelize.fn("lower", sequelize.col("last_name")),
+              " ",
+              ""
+            ),
+            {
+              [Op.or]: {
+                [Op.substring]: keyword,
+                [Op.startsWith]: keyword,
+                [Op.endsWith]: keyword,
+                [Op.eq]: keyword,
+              },
+            }
+          )
+        : {},
+      keyword
+        ? sequelize.where(
+            sequelize.fn(
+              "concat",
+              sequelize.fn(
+                "replace",
+                sequelize.fn("lower", sequelize.col("first_name")),
+                " ",
+                ""
+              ),
+              sequelize.fn(
+                "replace",
+                sequelize.fn("lower", sequelize.col("last_name")),
+                " ",
+                ""
+              )
+            ),
+            {
+              [Op.or]: {
+                [Op.substring]: keyword,
+                [Op.startsWith]: keyword,
+                [Op.endsWith]: keyword,
+                [Op.eq]: keyword,
+              },
+            }
+          )
+        : {},
+      keyword
+        ? sequelize.where(
+            sequelize.fn(
+              "concat",
+              sequelize.fn(
+                "replace",
+                sequelize.fn("lower", sequelize.col("last_name")),
+                " ",
+                ""
+              ),
+              sequelize.fn(
+                "replace",
+                sequelize.fn("lower", sequelize.col("first_name")),
+                " ",
+                ""
+              )
+            ),
+            {
+              [Op.or]: {
+                [Op.substring]: keyword,
+                [Op.startsWith]: keyword,
+                [Op.endsWith]: keyword,
+                [Op.eq]: keyword,
+              },
+            }
+          )
+        : {},
+      options,
+    ],
+  };
+
   const data = await Book.findAndCountAll({
     include: [
+      keyword || price || availabitity != undefined
+        ? { association: "author", where: authorOptions }
+        : "author",
       genre ? { association: "genres", where: { name: genre } } : "genres",
     ],
   });
@@ -35,7 +206,9 @@ async function getAll(limit, page, genre, orderBy) {
     limit: limit,
     offset: offset,
     include: [
-      "author",
+      keyword || price || availabitity != undefined
+        ? { association: "author", where: authorOptions }
+        : "author",
       "publisher",
       "cover",
       genre ? { association: "genres", where: { name: genre } } : "genres",

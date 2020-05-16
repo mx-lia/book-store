@@ -2,7 +2,7 @@ import React from "react";
 
 import { Container, Row, Col, Button, Image } from "react-bootstrap";
 
-import cover from "../../assets/books5.jpg";
+import cover from "../../assets/books.jpg";
 
 const FavoriteCard = () => {
   return (

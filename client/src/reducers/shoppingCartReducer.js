@@ -13,7 +13,7 @@ const shoppingCartReducer = (state = initialState, action) => {
     case "REMOVE_ITEM_SUCCESS":
       return {
         ...state,
-        isEmpty: false,
+        isEmpty: action.payload.length === 0 ? true : false,
         books: action.payload,
         totalCount: state.totalCount - 1,
         totalSum: state.totalSum - action.price,
@@ -33,14 +33,6 @@ const shoppingCartReducer = (state = initialState, action) => {
         books: action.payload,
         totalCount: state.totalCount - 1,
         totalSum: state.totalSum - action.price,
-      };
-    case "EMPTY_SHOPPING_CART":
-      return {
-        ...state,
-        isEmpty: true,
-        books: [],
-        totalCount: 0,
-        totalSum: 0.0,
       };
     default:
       return state;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 
-import { Row, Col, Form, Button } from "react-bootstrap";
+import { Row, Col, Form, Button, InputGroup } from "react-bootstrap";
 
 import { Formik } from "formik";
 import { initialValues, validationSchema } from "./form-config";
@@ -11,7 +11,10 @@ import { Context as CustomerContext } from "../../context/customerContext";
 import { createOrder } from "../../actions/orderActions";
 
 const OrderForm = () => {
-  const { setCurrentCustomer } = useContext(CustomerContext);
+  const {
+    state: { user },
+    setCurrentCustomer,
+  } = useContext(CustomerContext);
 
   const {
     state: { books },
@@ -21,13 +24,13 @@ const OrderForm = () => {
 
   useEffect(() => {
     (async () => {
-      setCustomer(await setCurrentCustomer());
+      await setCurrentCustomer();
     })();
   }, []);
 
   return (
     <Formik
-      initialValues={customer}
+      initialValues={user}
       validationSchema={validationSchema}
       enableReinitialize={true}
       onSubmit={async (values) => {
@@ -160,16 +163,21 @@ const OrderForm = () => {
           </Form.Group>
           <Form.Group>
             <Form.Label>Phone</Form.Label>
-            <Form.Control
-              name="phoneNumber"
-              type="text"
-              value={values.phoneNumber || ""}
-              onChange={handleChange}
-              isInvalid={!!errors.phoneNumber}
-            />
-            <Form.Control.Feedback type="invalid">
-              {errors.phoneNumber}
-            </Form.Control.Feedback>
+            <InputGroup>
+              <InputGroup.Prepend>
+                <InputGroup.Text>+375</InputGroup.Text>
+              </InputGroup.Prepend>
+              <Form.Control
+                name="phoneNumber"
+                type="text"
+                value={values.phoneNumber || ""}
+                onChange={handleChange}
+                isInvalid={!!errors.phoneNumber}
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.phoneNumber}
+              </Form.Control.Feedback>
+            </InputGroup>
           </Form.Group>
           <Button type="submit">Order</Button>
         </Form>

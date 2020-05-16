@@ -85,6 +85,12 @@ Customer.prototype.isValidPassword = async function (password) {
   return compare;
 };
 
+OrderDetail.afterCreate(async (details, options) => {
+  let book = await Book.findOne({ where: { isbn: details.book } });
+  book.availableQuantity -= details.amount;
+  book.save();
+});
+
 /* sequelize
   .sync({ force: true })
   .then((result) => {})

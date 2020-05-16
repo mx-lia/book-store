@@ -74,7 +74,7 @@ section,
   background-color: #ff0072;
 }
 .jumbotron {
-  background-image: url("./assets/books7.jpg");
+  background-image: url("./assets/books.jpg");
   background-size: cover;
   border-radius: 0;
 }
@@ -164,8 +164,5 @@ hr {
   }
   .container-fluid {
     width: 100%;
-  }
-  .arrow {
-    display: flex !important;
   }
 }

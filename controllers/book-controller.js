@@ -14,7 +14,10 @@ function getAll(req, res, next) {
       Number(req.query.limit),
       Number(req.query.page),
       req.query.genre,
-      req.query.orderBy
+      req.query.orderBy,
+      req.query.keyword,
+      req.query.price,
+      req.query.availability
     )
     .then((result) => res.json(result))
     .catch((err) => next(err));

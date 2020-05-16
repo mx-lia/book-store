@@ -20,6 +20,7 @@ const Search = () => {
       <InputGroup.Prepend>
         <Button
           href={"/books?keyword=" + keyword}
+          disabled={keyword ? false : true}
           variant="light"
           className="d-inline-flex align-items-center"
         >

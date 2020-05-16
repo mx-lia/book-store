@@ -27,7 +27,7 @@ const PaginationComponent = ({ currentPage, pages }) => {
           "?" +
           queryString.stringify({
             ...params,
-            page: currentPage - 1,
+            page: Number(currentPage) - 1,
           })
         }
       />
@@ -54,7 +54,7 @@ const PaginationComponent = ({ currentPage, pages }) => {
           "?" +
           queryString.stringify({
             ...params,
-            page: currentPage + 1,
+            page: Number(currentPage) + 1,
           })
         }
       />
