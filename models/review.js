@@ -9,8 +9,11 @@ module.exports = (sequelize, type) => {
       },
       date: {
         type: type.DATEONLY,
-        defaultValue: sequelize.fn("GETDATE"),
         allowNull: false,
+        defaultValue: sequelize.fn("GETDATE"),
+        validate: {
+          max: sequelize.fn("GETDATE"),
+        },
       },
       text: {
         type: type.STRING,

@@ -27,7 +27,11 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js&&node websocket.js&&set HTTPS=true&&cd client&&react-scripts start"
+    "start":"node app.js",
+    "https-server": "node app.js",
+    "ws-server": "node websocket.js",
+    "client": "npm start ---prefix client",
+    "dev": "concurrently \"npm run https-server\" \"npm run ws-server\" \"npm run client\""
   },
   "repository": {
     "type": "git",

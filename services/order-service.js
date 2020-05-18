@@ -1,16 +1,9 @@
 const { Order, OrderDetail, Customer } = require("../sequelize");
 
 module.exports = {
-  getAll,
   getByCustomerId,
   create,
-  update,
-  remove,
 };
-
-async function getAll() {
-  return await Order.findAll();
-}
 
 async function getByCustomerId(customerId) {
   let orders = await Order.findAll({ where: { customer_id: customerId } });
@@ -40,15 +33,5 @@ async function create({ customer, books }) {
     });
     await newOrderDetail.save();
   });
-}
-
-async function update(id, orderParams) {
-  const order = await Order.findByPk(id);
-  if (!order) throw "Order not found";
-  Object.assign(order, orderParams);
-  return await order.save();
-}
-
-async function remove(id) {
-  return await Order.destroy({ where: { id } });
+  return newOrder;
 }

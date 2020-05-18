@@ -41,6 +41,4 @@ app.use(orderRouter);
 app.use(favouriteBookRouter);
 app.use(reviewRouter);
 
-require("./middlewares/error");
-
 https.createServer(httpsOptions, app).listen(serverConfig.PORT);

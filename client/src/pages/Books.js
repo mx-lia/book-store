@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import { Container, Row, Col, Button, Form, ListGroup } from "react-bootstrap";
 
 import { useLocation } from "react-router-dom";
 import * as queryString from "query-string";
+
+import { ErrorContext } from "../context/errorContext";
 
 import BookCard from "../components/BookCard";
 import Pagination from "../components/Pagination";
@@ -13,6 +15,7 @@ import { getGenres } from "../actions/genreActions";
 import NoResults from "../components/NoResults";
 
 const Books = () => {
+  const { setError } = useContext(ErrorContext);
   const location = useLocation();
   const params = queryString.parse(location.search);
 
@@ -31,7 +34,7 @@ const Books = () => {
 
   useEffect(() => {
     (async () => {
-      setGenres(await getGenres());
+      setGenres(await getGenres(setError));
       const { books, count, pages } = await getBooks({
         limit: 30,
         page: currentPage,
@@ -40,7 +43,7 @@ const Books = () => {
         keyword: keyword,
         price: price,
         availability: availability,
-      });
+      }, setError);
       setBooks(books);
       setCount(count);
       setPages(pages);

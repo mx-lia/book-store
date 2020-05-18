@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useLocation, Link } from "react-router-dom";
 import * as queryString from "query-string";
+
+import { ErrorContext } from "../context/errorContext";
 
 import { Badge, Table } from "react-bootstrap";
 
@@ -14,6 +16,7 @@ const DataGrid = ({
   setAvailableCount,
   setNotAvailableCount,
 }) => {
+  const { setError } = useContext(ErrorContext);
   const location = useLocation();
   const params = queryString.parse(location.search);
   const [books, setBooks] = useState([]);
@@ -27,7 +30,7 @@ const DataGrid = ({
         page: currentPage,
         genre: params.genre,
         orderBy: params.orderBy,
-      });
+      }, setError);
       setBooks(books);
       setTotalCount(count);
       setAvailableCount(

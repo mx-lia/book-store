@@ -14,10 +14,14 @@ async function getByCustomerId(customerId) {
 }
 
 async function create(bookIsbn, customerId) {
-  const favouriteBook = new FavouriteBook({ book: bookIsbn, customer: customerId });
+  const favouriteBook = new FavouriteBook({
+    book: bookIsbn,
+    customer: customerId,
+  });
   return await favouriteBook.save();
 }
 
 async function remove(id) {
-  return await FavouriteBook.destroy({ where: { id } });
+  await FavouriteBook.destroy({ where: { id } });
+  return id;
 }

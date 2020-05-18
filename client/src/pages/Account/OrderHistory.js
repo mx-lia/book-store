@@ -1,15 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 
 import OrderCard from "../../components/Account/OrderCard";
 
 import { getOrders } from "../../actions/orderActions";
 
+import { ErrorContext } from "../../context/errorContext";
+
 const History = () => {
+  const { setError } = useContext(ErrorContext);
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
     (async () => {
-      setOrders(await getOrders());
+      setOrders(await getOrders(setError));
     })();
   }, []);
 

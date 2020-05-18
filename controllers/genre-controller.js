@@ -1,39 +1,20 @@
-const genreService = require('../services/genre-service');
+const genreService = require("../services/genre-service");
 
 module.exports = {
-    getAll,
-    getById,
-    create,
-    update,
-    remove
+  getAll,
+  create,
 };
 
 function getAll(req, res, next) {
-    genreService.getAll()
-        .then(genres => res.json(genres))
-        .catch(err => next(err));
-}
-
-function getById(req, res, next) {
-    genreService.getById(req.params.id)
-        .then(genre => genre ? res.json(genre) : res.sendStatus(404))
-        .catch(err => next(err));
+  genreService
+    .getAll()
+    .then((genres) => res.json(genres))
+    .catch((err) => res.status(500).json({ message: err.message }));
 }
 
 function create(req, res, next) {
-    genreService.create(req.body)
-        .then((genre) => res.json(genre))
-        .catch(err => next(err));
-}
-
-function update(req, res, next) {
-    genreService.update(req.params.id, req.body)
-        .then(() => res.json({}))
-        .catch(err => next(err));
-}
-
-function remove(req, res, next) {
-    genreService.remove(req.params.id)
-        .then(() => res.json({}))
-        .catch(err => next(err));
+  genreService
+    .create(req.body)
+    .then((genre) => res.json(genre))
+    .catch((err) => res.status(500).json({ message: err.message }));
 }

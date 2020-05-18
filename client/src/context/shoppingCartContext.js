@@ -1,5 +1,6 @@
 import React from "react";
 import ShoppingCartReducer from "../reducers/shoppingCartReducer";
+import { ErrorContext } from "../context/errorContext";
 import {
   addItem,
   removeItem,
@@ -11,6 +12,8 @@ import {
 export const Context = React.createContext();
 
 const ShoppingCartProvider = ({ children }) => {
+  const { setError } = React.useContext(ErrorContext);
+
   const [state, dispatch] = React.useReducer(ShoppingCartReducer, {
     books: localStorage.getItem("shoppingCart")
       ? JSON.parse(localStorage.getItem("shoppingCart"))
@@ -32,11 +35,11 @@ const ShoppingCartProvider = ({ children }) => {
     <Context.Provider
       value={{
         state,
-        addItem: addItem(dispatch),
-        removeItem: removeItem(dispatch),
-        incrementItem: incrementItem(dispatch),
-        decrementItem: decrementItem(dispatch),
-        isInCart: isInCart(),
+        addItem: addItem(dispatch, setError),
+        removeItem: removeItem(dispatch, setError),
+        incrementItem: incrementItem(dispatch, setError),
+        decrementItem: decrementItem(dispatch, setError),
+        isInCart: isInCart(setError),
       }}
     >
       {children}

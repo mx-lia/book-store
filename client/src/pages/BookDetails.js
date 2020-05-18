@@ -10,11 +10,13 @@ import { ReactComponent as ShippingIcon } from "../assets/shipping.svg";
 import { useParams } from "react-router-dom";
 import { Context as CustomerContext } from "../context/customerContext";
 import { Context as ShoppingCartContext } from "../context/shoppingCartContext";
+import { ErrorContext } from "../context/errorContext";
 
 import { getBook } from "../actions/bookActions";
 import { createFavourite } from "../actions/favouriteBookActions";
 
 const BookDetails = () => {
+  const { setError } = useContext(ErrorContext);
   const [book, setBook] = useState();
   const [inCart, setInCart] = useState(false);
   const {
@@ -26,7 +28,7 @@ const BookDetails = () => {
 
   useEffect(() => {
     (async () => {
-      setBook(await getBook(isbn));
+      setBook(await getBook(isbn, setError));
     })();
     setInCart(isInCart(isbn));
   }, [isbn]);
@@ -100,7 +102,7 @@ const BookDetails = () => {
                   variant="light"
                   className="w-100 mt-2"
                   disabled={user ? false : true}
-                  onClick={() => createFavourite(book.isbn)}
+                  onClick={() => createFavourite(book.isbn, setError)}
                 >
                   {user ? "Add to favourites" : "Favourites is blocked for guests"}
                 </Button>

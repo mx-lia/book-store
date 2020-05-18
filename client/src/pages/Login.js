@@ -24,21 +24,10 @@ const loginSchema = yup.object({
 });
 
 const Login = () => {
-  const {
-    state: { error },
-    signIn,
-    signUp,
-  } = useContext(CustomerContext);
+  const { signIn, signUp } = useContext(CustomerContext);
 
   return (
     <Container fluid as="main" className="my-3" role="main">
-      {error && (
-        <Row>
-          <Col>
-            <div>{error}</div>
-          </Col>
-        </Row>
-      )}
       <Row className="mx-0 justify-content-center">
         <Col xs={12} md={5} className="panel mb-3 mb-md-0">
           <Formik

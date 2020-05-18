@@ -9,7 +9,6 @@ module.exports = {
   create,
   findOrCreateByEmail,
   update,
-  remove,
 };
 
 async function getById(id) {
@@ -50,8 +49,4 @@ async function update(id, customer) {
     where: { id: id },
   });
   return customer;
-}
-
-async function remove(id) {
-  return await Customer.destroy({ where: { id } });
 }

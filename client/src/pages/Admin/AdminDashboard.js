@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 
 import { Container, Row, Col } from "react-bootstrap";
 
 import AdminHeader from "../../components/AdminLayout/AdminHeader";
 import CardButton from "../../components/AdminLayout/CardButton";
 import DataGrid from "../../components/DataGrid";
+import Alert from "../../components/Alert";
 
 import { ReactComponent as CircleIcon } from "../../assets/circle.svg";
 import { ReactComponent as AvailableIcon } from "../../assets/available.svg";
@@ -12,7 +13,10 @@ import { ReactComponent as NotAvailableIcon } from "../../assets/not-available.s
 import { ReactComponent as InboxIcon } from "../../assets/inbox.svg";
 import { ReactComponent as AddIcon } from "../../assets/add.svg";
 
+import { ErrorContext } from "../../context/errorContext";
+
 const AdminDashboard = () => {
+  const { error } = useContext(ErrorContext);
   const [totalCount, setTotalCount] = useState(0);
   const [availableCount, setAvailableCount] = useState(0);
   const [notAvailableCount, setNotAvailableCount] = useState(0);
@@ -23,6 +27,7 @@ const AdminDashboard = () => {
         title={"Books"}
         subtitle={`You currently have ${totalCount} in the catalog!`}
       />
+      {error && <Alert />}
       <Container fluid as="main" className="my-3" role="main">
         <Row>
           <Col>

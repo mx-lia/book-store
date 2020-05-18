@@ -20,33 +20,33 @@ function getAll(req, res, next) {
       req.query.availability
     )
     .then((result) => res.json(result))
-    .catch((err) => next(err));
+    .catch((err) => res.status(500).json({ message: err.message }));
 }
 
 function getByIsbn(req, res, next) {
   bookService
     .getByIsbn(req.params.isbn)
-    .then((book) => (book ? res.json(book) : res.sendStatus(404)))
-    .catch((err) => next(err));
+    .then((book) => res.json(book))
+    .catch((err) => res.status(500).json({ message: err.message }));
 }
 
 function create(req, res, next) {
   bookService
     .create(req.body, req.files)
-    .then(() => res.json({}))
-    .catch((err) => next(err));
+    .then((book) => res.json(book))
+    .catch((err) => res.status(500).json({ message: err.message }));
 }
 
 function update(req, res, next) {
   bookService
     .update(req.params.isbn, req.body, req.files)
-    .then(() => res.json({}))
-    .catch((err) => next(err));
+    .then((book) => res.json(book))
+    .catch((err) => res.status(500).json({ message: err.message }));
 }
 
 function remove(req, res, next) {
   bookService
     .remove(req.params.isbn)
-    .then(() => res.json({}))
-    .catch((err) => next(err));
+    .then((isbn) => res.json(isbn))
+    .catch((err) => res.status(500).json({ message: err.message }));
 }

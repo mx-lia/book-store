@@ -33,7 +33,7 @@ function createFormData(values) {
   return formData;
 }
 
-export const getBooks = async (params) => {
+export const getBooks = async (params, setError) => {
   try {
     let url = "/books?";
     for (let key in params) {
@@ -52,10 +52,12 @@ export const getBooks = async (params) => {
       pages.push(i);
     }
     return { ...res, pages, books };
-  } catch (err) {}
+  } catch (err) {
+    setError(err);
+  }
 };
 
-export const getBook = async (isbn) => {
+export const getBook = async (isbn, setError) => {
   try {
     const res = await serverCall(`/book/${isbn}`);
     return {
@@ -64,26 +66,40 @@ export const getBook = async (isbn) => {
         ? "data:image/jpg;base64," + arrayBufferToBase64(res.cover.image.data)
         : null,
     };
-  } catch (err) {}
+  } catch (err) {
+    setError(err);
+  }
 };
 
-export const createBook = async (values) => {
+export const createBook = async (values, setError) => {
   try {
-    const res = await fetch("/book/new", { method: "POST", body: createFormData(values) });
+    const res = await fetch("/book/new", {
+      method: "POST",
+      body: createFormData(values),
+    });
     return res;
-  } catch (err) {}
+  } catch (err) {
+    setError(err);
+  }
 };
 
-export const updateBook = async (values) => {
+export const updateBook = async (values, setError) => {
   try {
-    const res = await fetch(`/book/${values.isbn}`, { method: "PUT", body: createFormData(values) });
+    const res = await fetch(`/book/${values.isbn}`, {
+      method: "PUT",
+      body: createFormData(values),
+    });
     return res;
-  } catch (err) {}
+  } catch (err) {
+    setError(err);
+  }
 };
 
-export const deleteBook = async (isbn) => {
+export const deleteBook = async (isbn, setError) => {
   try {
     const res = await serverCall(`/book/${isbn}`, { method: "DELETE" });
     return res;
-  } catch (err) {}
+  } catch (err) {
+    setError(err);
+  }
 };

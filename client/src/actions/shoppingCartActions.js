@@ -1,4 +1,4 @@
-export const addItem = (dispatch) => (book) => {
+export const addItem = (dispatch, setError) => (book) => {
   try {
     dispatch({ type: "ADD_ITEM_LOADING" });
     let booksInCart = [];
@@ -20,10 +20,12 @@ export const addItem = (dispatch) => (book) => {
       payload: booksInCart,
       price: book.price,
     });
-  } catch (err) {}
+  } catch (err) {
+    setError(err.message);
+  }
 };
 
-export const removeItem = (dispatch) => (book) => {
+export const removeItem = (dispatch, setError) => (book) => {
   try {
     dispatch({ type: "REMOVE_ITEM_LOADING" });
     let booksInCart = JSON.parse(localStorage.getItem("shoppingCart"));
@@ -36,10 +38,12 @@ export const removeItem = (dispatch) => (book) => {
       payload: booksInCart,
       price: book.price,
     });
-  } catch (err) {}
+  } catch (err) {
+    setError(err.message);
+  }
 };
 
-export const incrementItem = (dispatch) => (book) => {
+export const incrementItem = (dispatch, setError) => (book) => {
   try {
     dispatch({ type: "INCREMENT_ITEM_LOADING" });
     let booksInCart = JSON.parse(localStorage.getItem("shoppingCart"));
@@ -61,10 +65,12 @@ export const incrementItem = (dispatch) => (book) => {
       payload: booksInCart,
       price: book.price,
     });
-  } catch (err) {}
+  } catch (err) {
+    setError(err.message);
+  }
 };
 
-export const decrementItem = (dispatch) => (book) => {
+export const decrementItem = (dispatch, setError) => (book) => {
   try {
     dispatch({ type: "DECREMENT_ITEM_LOADING" });
     let booksInCart = JSON.parse(localStorage.getItem("shoppingCart"));
@@ -86,14 +92,18 @@ export const decrementItem = (dispatch) => (book) => {
       payload: booksInCart,
       price: book.price,
     });
-  } catch (err) {}
+  } catch (err) {
+    setError(err.message);
+  }
 };
 
-export const isInCart = () => (isbn) => {
+export const isInCart = (setError) => (isbn) => {
   try {
     let booksInCart = JSON.parse(localStorage.getItem("shoppingCart"));
     booksInCart = booksInCart.filter((value) => value.book.isbn === isbn);
     if (booksInCart && booksInCart.length !== 0) return true;
     else return false;
-  } catch (err) {}
+  } catch (err) {
+    setError(err.message);
+  }
 };

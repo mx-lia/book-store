@@ -1,16 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Image } from "react-bootstrap";
 
 import noImage from "../../assets/noimage.png";
 
+import { ErrorContext } from "../../context/errorContext";
+
 import { getBook } from "../../actions/bookActions";
 
 const OrderItem = ({ orderDetail, totalSum, setTotalSum }) => {
+  const { setError } = useContext(ErrorContext);
   const [book, setBook] = useState();
 
   useEffect(() => {
     (async () => {
-      const book = await getBook(orderDetail.book);
+      const book = await getBook(orderDetail.book, setError);
       setBook(book);
       setTotalSum(totalSum + orderDetail.amount * book.price);
     })();

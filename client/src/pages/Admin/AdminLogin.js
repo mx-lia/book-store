@@ -4,9 +4,11 @@ import { Container, Row, Col, Form, Button, Image } from "react-bootstrap";
 import { Formik } from "formik";
 import * as yup from "yup";
 
+import Alert from "../../components/Alert";
 import Logo from "../../assets/book.svg";
 
 import { Context as CustomerContext } from "../../context/customerContext";
+import { ErrorContext } from "../../context/errorContext";
 
 const loginSchema = yup.object({
   email: yup.string().required(),
@@ -14,10 +16,12 @@ const loginSchema = yup.object({
 });
 
 const AdminLogin = () => {
+  const { error } = useContext(ErrorContext);
   const { signIn } = useContext(CustomerContext);
-  
+
   return (
     <Container>
+      {error && <Alert />}
       <Row className="align-self-center">
         <Col></Col>
         <Col xs={12} md>

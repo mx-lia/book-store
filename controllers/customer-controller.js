@@ -9,13 +9,12 @@ module.exports = {
   authentificate,
   getById,
   update,
-  remove,
 };
 
 function authentificate(req, res, next) {
   try {
-    req.login(req.user, { session: false }, async (error) => {
-      if (error) return next(error);
+    req.login(req.user, { session: false }, async (err) => {
+      if (err) return res.status(500).json({ message: err.message });
       const customer = req.user;
       const body = { id: customer.id, role: customer.role };
       const token = jwt.sign({ user: body }, JWT_SECRET);
@@ -27,38 +26,27 @@ function authentificate(req, res, next) {
       if (customer.role == rolesConfig.CUSTOMER_ROLES.admin)
         return res
           .cookie("jwt", token, options)
-          .redirect("http://localhost:3000/admin/dashboard");
+          .redirect("https://localhost:3000/admin/dashboard");
       else
         return res
           .cookie("jwt", token, options)
-          .redirect("http://localhost:3000/account/personal");
+          .redirect("https://localhost:3000/account/personal");
     });
-  } catch (error) {
-    return next(error);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
   }
 }
 
 function getById(req, res, next) {
   customerService
     .getById(req.user.id)
-    .then((customer) =>
-      customer ? res.status(200).json({ user: customer }) : res.sendStatus(500)
-    )
-    .catch((err) => next(err));
+    .then((customer) => res.status(200).json({ user: customer }))
+    .catch((err) => res.status(500).json({ message: err.message }));
 }
 
 function update(req, res, next) {
   customerService
     .update(req.user.id, req.body)
-    .then((customer) =>
-      customer ? res.status(200).json({ user: customer }) : res.sendStatus(500)
-    )
-    .catch((err) => next(err));
-}
-
-function remove(req, res, next) {
-  customerService
-    .remove(req.params.id)
-    .then(() => res.json({}))
-    .catch((err) => next(err));
+    .then((customer) => res.status(200).json({ user: customer }))
+    .catch((err) => res.status(500).json({ message: err.message }));
 }

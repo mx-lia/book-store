@@ -1,15 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import FavouriteCard from "../../components/Account/FavouriteCard";
 
 import { getFavourites } from "../../actions/favouriteBookActions";
 
+import { ErrorContext } from "../../context/errorContext";
+
 const Favourites = () => {
+  const { setError } = useContext(ErrorContext);
   const [favourites, setFavourites] = useState([]);
 
   useEffect(() => {
     (async () => {
-      setFavourites(await getFavourites());
+      setFavourites(await getFavourites(setError));
     })();
   }, []);
 

@@ -44,6 +44,7 @@ const PersonalInfo = () => {
             onSubmit={async (values, actions) => {
               await updateCustomer(values);
               actions.setSubmitting(false);
+              actions.resetForm();
             }}
             initialValues={user}
             validationSchema={customerSchema}

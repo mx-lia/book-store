@@ -239,6 +239,7 @@ async function create(book, files) {
       book_isbn: newBook.isbn,
     });
   }
+  return book;
 }
 
 async function update(isbn, updatedBook, files) {
@@ -267,8 +268,10 @@ async function update(isbn, updatedBook, files) {
       });
     }
   }
+  return updatedBook;
 }
 
 async function remove(isbn) {
-  return await Book.destroy({ where: { isbn: isbn } });
+  await Book.destroy({ where: { isbn: isbn } });
+  return isbn;
 }

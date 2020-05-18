@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useParams } from "react-router-dom";
 
 import { Container, Row, Col } from "react-bootstrap";
 
 import AdminHeader from "../../components/AdminLayout/AdminHeader";
 import BookForm from "../../components/BookForm/BookForm";
+import Alert from "../../components/Alert";
+
+import { ErrorContext } from "../../context/errorContext";
 
 const DashboardBook = () => {
+  const { error } = useContext(ErrorContext);
   const { isbn } = useParams();
 
   return (
@@ -15,6 +19,7 @@ const DashboardBook = () => {
         title={isbn ? "Book" : "New book"}
         subtitle={isbn ? "ISBN: " + isbn : "Fill form with valid data"}
       />
+      {error && <Alert />}
       <Container fluid as="main" className="my-3" role="main">
         <Row>
           <Col>

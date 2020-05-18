@@ -7,10 +7,13 @@ import { validationSchema } from "./form-config";
 
 import { Context as ShoppingCartContext } from "../../context/shoppingCartContext";
 import { Context as CustomerContext } from "../../context/customerContext";
+import { ErrorContext } from "../../context/errorContext";
 
 import { createOrder } from "../../actions/orderActions";
 
 const OrderForm = () => {
+  const { setError } = useContext(ErrorContext);
+  
   const {
     state: { user },
     setCurrentCustomer,
@@ -32,7 +35,7 @@ const OrderForm = () => {
       validationSchema={validationSchema}
       enableReinitialize={true}
       onSubmit={async (values) => {
-        await createOrder(values, books);
+        await createOrder(values, books, setError);
         window.location.href = "/account/history";
       }}
     >

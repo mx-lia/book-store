@@ -71,7 +71,7 @@ section,
   background-color: #ff0072;
 }
 .jumbotron {
-  background-image: url("./assets/books.jpg");
+  background-image: url("../assets/books.jpg");
   background-size: cover;
   border-radius: 0;
 }

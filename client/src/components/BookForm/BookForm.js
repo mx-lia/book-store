@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import {
   Row,
@@ -12,6 +12,8 @@ import {
 
 import { Formik } from "formik";
 import { initialValues, bookSchema } from "./form-config";
+
+import { ErrorContext } from "../../context/errorContext";
 
 import { getGenres, createGenre } from "../../actions/genreActions";
 import { getAuthors, createAuthor } from "../../actions/authorActions";
@@ -31,6 +33,7 @@ import Select from "./form-components/Select";
 import makeAnimated from "react-select/animated";
 
 const BookForm = ({ isbn }) => {
+  const { setError } = useContext(ErrorContext);
   const animatedComponents = makeAnimated();
   const [book, setBook] = useState(initialValues);
   const [genres, setGenres] = useState([]);
@@ -40,11 +43,11 @@ const BookForm = ({ isbn }) => {
 
   useEffect(() => {
     (async () => {
-      setGenres(await getGenres());
-      setAuthors(await getAuthors());
-      setPublishers(await getPublishers());
+      setGenres(await getGenres(setError));
+      setAuthors(await getAuthors(setError));
+      setPublishers(await getPublishers(setError));
       if (isbn) {
-        const newValues = await getBook(isbn);
+        const newValues = await getBook(isbn, setError);
         delete newValues.publisher_id;
         delete newValues.author_id;
         setBook({
@@ -72,9 +75,8 @@ const BookForm = ({ isbn }) => {
         <div className="panel shadow-sm">
           <Formik
             onSubmit={async (values) => {
-              let res;
-              if (isbn) res = await updateBook(values);
-              else res = await createBook(values);
+              if (isbn) await updateBook(values, setError);
+              else await createBook(values, setError);
               window.location.href = "/admin/dashboard";
             }}
             initialValues={book}
@@ -101,7 +103,7 @@ const BookForm = ({ isbn }) => {
                         variant="danger"
                         className="d-inline-flex align-items-center"
                         onClick={async () => {
-                          await deleteBook(values.isbn);
+                          await deleteBook(values.isbn, setError);
                           window.location.href = "/admin/dashboard";
                         }}
                       >
@@ -172,7 +174,7 @@ const BookForm = ({ isbn }) => {
                           errors={errors.genres}
                           items={genres}
                           setItems={setGenres}
-                          createItem={createGenre}
+                          createItem={createGenre(setError)}
                           closeMenuOnSelect={false}
                           isMulti
                           options={genres.map((element) => ({
@@ -207,7 +209,7 @@ const BookForm = ({ isbn }) => {
                           value={values.author}
                           items={authors}
                           setItems={setAuthors}
-                          createItem={createAuthor}
+                          createItem={createAuthor(setError)}
                           errors={errors.author}
                           components={animatedComponents}
                           options={authors.map((element) => ({
@@ -224,7 +226,7 @@ const BookForm = ({ isbn }) => {
                           value={values.publisher}
                           items={publishers}
                           setItems={setPublishers}
-                          createItem={createPublisher}
+                          createItem={createPublisher(setError)}
                           errors={errors.publisher}
                           components={animatedComponents}
                           options={publishers.map((element) => ({

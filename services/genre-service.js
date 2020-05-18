@@ -1,33 +1,15 @@
-const { Genre } = require('../sequelize');
+const { Genre } = require("../sequelize");
 
 module.exports = {
-    getAll,
-    getById,
-    create,
-    update,
-    remove
+  getAll,
+  create,
 };
 
 async function getAll() {
-    return await Genre.findAll();
-}
-
-async function getById(id) {
-    return await Genre.findByPk(id);
+  return await Genre.findAll();
 }
 
 async function create(genre) {
-    const newGenre = new Genre(genre);
-    return await newGenre.save();
-}
-
-async function update(id, genreParams) {
-    const genre = await Genre.findByPk(id);
-    if (!genre) throw 'Genre not found';
-    Object.assign(genre, genreParams);
-    return await genre.save();
-}
-
-async function remove(id) {
-    return await Genre.destroy({ where: { id } });
+  const newGenre = new Genre(genre);
+  return await newGenre.save();
 }

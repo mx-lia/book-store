@@ -1,13 +1,15 @@
 import serverCall from "./serverCall";
 
-export const getOrders = async () => {
+export const getOrders = async (setError) => {
   try {
     const res = await serverCall("/orders");
     return res;
-  } catch (err) {}
+  } catch (err) {
+    setError(err);
+  }
 };
 
-export const createOrder = async (customer, books) => {
+export const createOrder = async (customer, books, setError) => {
   try {
     const res = await serverCall("/order/new", {
       body: {
@@ -18,5 +20,7 @@ export const createOrder = async (customer, books) => {
       },
     });
     return res;
-  } catch (err) {}
+  } catch (err) {
+    setError(err);
+  }
 };

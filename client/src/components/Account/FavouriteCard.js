@@ -5,18 +5,20 @@ import { Container, Row, Col, Button, Image } from "react-bootstrap";
 import noImage from "../../assets/noimage.png";
 
 import { Context as ShoppingCartContext } from "../../context/shoppingCartContext";
+import { ErrorContext } from "../../context/errorContext";
 
 import { getBook } from "../../actions/bookActions";
 import { deleteFavourite } from "../../actions/favouriteBookActions";
 
 const FavouriteCard = ({ favourite }) => {
+  const { setError } = useContext(ErrorContext);
   const [book, setBook] = useState();
   const [inCart, setInCart] = useState(false);
   const { addItem, isInCart } = useContext(ShoppingCartContext);
 
   useEffect(() => {
     (async () => {
-      const book = await getBook(favourite.book);
+      const book = await getBook(favourite.book, setError);
       setBook(book);
       setInCart(isInCart(book.isbn));
     })();
@@ -51,7 +53,7 @@ const FavouriteCard = ({ favourite }) => {
             <Button
               variant="secondary"
               onClick={() => {
-                deleteFavourite(favourite.id);
+                deleteFavourite(favourite.id, setError);
                 setBook();
               }}
             >

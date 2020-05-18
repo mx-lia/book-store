@@ -11,10 +11,12 @@ import noImage from "../../assets/noimage.png";
 
 import { Context as ShoppingCartContext } from "../../context/shoppingCartContext";
 import { Context as CustomerContext } from "../../context/customerContext";
+import { ErrorContext } from "../../context/errorContext";
 
 import { createFavourite } from "../../actions/favouriteBookActions";
 
 const ShoppingCartItem = ({ book, quantity }) => {
+  const { setError } = useContext(ErrorContext);
   const { removeItem } = useContext(ShoppingCartContext);
   const {
     state: { user },
@@ -67,7 +69,7 @@ const ShoppingCartItem = ({ book, quantity }) => {
                 variant="danger"
                 className="d-inline-flex align-items-center mb-md-1"
                 disabled={user ? false : true}
-                onClick={() => createFavourite(book.isbn)}
+                onClick={() => createFavourite(book.isbn, setError)}
               >
                 <FavoriteIcon fill="#fff" className="pr-md-1" />
                 <span>Add to favorite</span>

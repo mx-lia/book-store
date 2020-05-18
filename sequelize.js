@@ -117,10 +117,10 @@ OrderDetail.afterCreate(async (details, options) => {
   book.save();
 });
 
-/* sequelize
+sequelize
   .sync({ force: true })
   .then((result) => {})
-  .catch((err) => console.log(err)); */
+  .catch((err) => console.log(err));
 
 module.exports = {
   Book,

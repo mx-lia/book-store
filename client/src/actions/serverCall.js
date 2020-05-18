@@ -19,7 +19,11 @@ export default function serverCall(
       window.location.href = response.url;
       return;
     }
-    if (response.status === 500) throw new Error("Something wrong");
+    if (response.status === 500) {
+      let data;
+      if (!response.body.locked) data = await response.json();
+      throw new Error(data ? data.message : "Something wrong");
+    }
     if (response.status === 401) return;
     if (response.ok) {
       const data = await response.json();

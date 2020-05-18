@@ -42,13 +42,13 @@ router.get(
   passport.authenticate("google", {
     session: false,
     scope: ["email", "profile"],
-    failureRedirect: "http://localhost:4000/auth/failed",
+    failureRedirect: "https://localhost:4000/auth/failed",
   }),
   customerController.authentificate
 );
 
 router.get("/auth/failed", (req, res) => {
-  res.redirect("http://localhost:3000/");
+  res.redirect("https://localhost:3000/");
 });
 
 router.get(
@@ -68,11 +68,5 @@ router.get(
 router.put(
   "/customer",
   passport.authenticate("jwt", { session: false }),
-  customerController.update
-);
-
-router.delete(
-  "/customer",
-  passport.authenticate("jwt", { session: false }),
-  customerController.remove
+  allowOnly(rolesConfig.ACCESS_LEVELS.user, customerController.update)
 );

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import { Container, Jumbotron, Row, Col } from "react-bootstrap";
 
@@ -6,12 +6,15 @@ import BookCard from "../components/BookCard";
 
 import { getBooks } from "../actions/bookActions";
 
+import { ErrorContext } from "../context/errorContext";
+
 const Home = () => {
+  const { setError } = useContext(ErrorContext);
   const [books, setBooks] = useState([]);
 
   useEffect(() => {
     (async () => {
-      const { books } = await getBooks({ limit: 6, page: 1 });
+      const { books } = await getBooks({ limit: 6, page: 1 }, setError);
       setBooks(books);
     })();
   }, []);

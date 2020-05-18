@@ -4,12 +4,14 @@ import { Form, Button, Col, Row } from "react-bootstrap";
 import { Formik } from "formik";
 
 import { Context as CustomerContext } from "../context/customerContext";
+import { ErrorContext } from "../context/errorContext";
 import {
   getReviewsByIsbn,
   createReviewWebSocket,
 } from "../actions/reviewActions";
 
 const Reviews = ({ isbn }) => {
+  const { setError } = useContext(ErrorContext);
   const [ws, setWS] = useState(new WebSocket("ws://localhost:3030"));
   const [reviews, setReviews] = useState([]);
   const [newReview, setNewReview] = useState({});
@@ -28,7 +30,7 @@ const Reviews = ({ isbn }) => {
 
   useEffect(() => {
     (async () => {
-      setReviews(await getReviewsByIsbn(isbn));
+      setReviews(await getReviewsByIsbn(isbn, setError));
     })();
   }, [newReview, isbn]);
 
@@ -53,7 +55,7 @@ const Reviews = ({ isbn }) => {
           <Formik
             initialValues={{ text: "", isbn: isbn, customerId: user.id }}
             onSubmit={(values, actions) => {
-              createReviewWebSocket(ws, values);
+              createReviewWebSocket(ws, values, setError);
               setNewReview(values);
               actions.setSubmitting(false);
               actions.resetForm();
