@@ -1,3 +1,9 @@
+const https = require("https");
+const fs = require("fs");
+const httpsOptions = {
+  key: fs.readFileSync("./certificates/server.key"),
+  cert: fs.readFileSync("./certificates/server.crt"),
+};
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
@@ -37,4 +43,4 @@ app.use(reviewRouter);
 
 require("./middlewares/error");
 
-app.listen(serverConfig.PORT);
+https.createServer(httpsOptions, app).listen(serverConfig.PORT);

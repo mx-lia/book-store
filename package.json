@@ -27,7 +27,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
+    "start": "node app.js&&node websocket.js&&set HTTPS=true&&cd client&&react-scripts start"
   },
   "repository": {
     "type": "git",
