@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 
 import { Row, Col, Form, InputGroup, Button } from "react-bootstrap";
 
@@ -41,14 +41,22 @@ const PersonalInfo = () => {
       {user && (
         <div className="mt-2">
           <Formik
-            onSubmit={async (values) => {
-              const res = await updateCustomer(values);
+            onSubmit={async (values, actions) => {
+              await updateCustomer(values);
+              actions.setSubmitting(false);
             }}
             initialValues={user}
             validationSchema={customerSchema}
             enableReinitialize={true}
           >
-            {({ handleSubmit, handleChange, resetForm, values, errors }) => (
+            {({
+              handleSubmit,
+              handleChange,
+              resetForm,
+              isSubmitting,
+              values,
+              errors,
+            }) => (
               <Form noValidate autoComplete="false" onSubmit={handleSubmit}>
                 <Form.Group as={Row}>
                   <Form.Label column lg={3}>
@@ -235,7 +243,11 @@ const PersonalInfo = () => {
                     >
                       Cancel
                     </Button>
-                    <Button type="submit" className="ml-1">
+                    <Button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="ml-1"
+                    >
                       Save changes
                     </Button>
                   </Col>

@@ -1,19 +1,11 @@
 module.exports = (sequelize, type) => {
   return sequelize.define(
-    "orders",
+    "favourite_books",
     {
       id: {
         type: type.INTEGER,
         primaryKey: true,
         autoIncrement: true,
-      },
-      date: {
-        type: type.DATEONLY,
-        allowNull: false,
-        defaultValue: sequelize.fn("GETDATE"),
-        validate: {
-          max: sequelize.fn("GETDATE"),
-        },
       },
     },
     {

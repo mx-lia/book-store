@@ -30,7 +30,7 @@ async function create({ customer, books }) {
   await Customer.update(customer, {
     where: { id: customer.id },
   });
-  let newOrder = new Order({ customer_id: customer.id, date: new Date() });
+  let newOrder = new Order({ customer_id: customer.id });
   newOrder = await newOrder.save();
   books.map(async (element) => {
     const newOrderDetail = new OrderDetail({
@@ -46,9 +46,9 @@ async function update(id, orderParams) {
   const order = await Order.findByPk(id);
   if (!order) throw "Order not found";
   Object.assign(order, orderParams);
-  await order.save();
+  return await order.save();
 }
 
 async function remove(id) {
-  await Order.destroy({ where: { id } });
+  return await Order.destroy({ where: { id } });
 }

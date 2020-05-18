@@ -30,6 +30,8 @@ const BookGenre = require("./models/book-genre")(sequelize, Sequelize);
 const Customer = require("./models/customer")(sequelize, Sequelize);
 const Order = require("./models/order")(sequelize, Sequelize);
 const OrderDetail = require("./models/order-detail")(sequelize, Sequelize);
+const FavouriteBook = require("./models/favourite-book")(sequelize, Sequelize);
+const Review = require("./models/review")(sequelize, Sequelize);
 
 Book.belongsTo(Author, {
   foreignKey: { name: "author_id", allowNull: false },
@@ -42,14 +44,14 @@ Book.belongsTo(Publisher, {
   onDelete: "cascade",
 });
 Book.belongsToMany(Genre, {
-  foreignKey: { name: "book" },
+  foreignKey: { name: "book", allowNull: false, },
   through: BookGenre,
   unique: false,
   onDelete: "cascade",
   onUpdate: "cascade",
 });
 Genre.belongsToMany(Book, {
-  foreignKey: { name: "genre" },
+  foreignKey: { name: "genre", allowNull: false, },
   through: BookGenre,
   unique: false,
   onDelete: "cascade",
@@ -61,15 +63,29 @@ Order.belongsTo(Customer, {
   onDelete: "cascade",
 });
 Order.belongsToMany(Book, {
-  foreignKey: { name: "order" },
+  foreignKey: { name: "order", allowNull: false, },
   through: OrderDetail,
   unique: false,
   onDelete: "cascade",
   onUpdate: "cascade",
 });
 Book.belongsToMany(Order, {
-  foreignKey: { name: "book" },
+  foreignKey: { name: "book", allowNull: false, },
   through: OrderDetail,
+  unique: false,
+  onDelete: "cascade",
+  onUpdate: "cascade",
+});
+Customer.belongsToMany(Book, {
+  foreignKey: { name: "customer", allowNull: false, },
+  through: FavouriteBook,
+  unique: false,
+  onDelete: "cascade",
+  onUpdate: "cascade",
+});
+Book.belongsToMany(Customer, {
+  foreignKey: { name: "book", allowNull: false },
+  through: FavouriteBook,
   unique: false,
   onDelete: "cascade",
   onUpdate: "cascade",
@@ -77,6 +93,16 @@ Book.belongsToMany(Order, {
 Book.hasOne(BookCover, {
   foreignKey: { name: "book_isbn", allowNull: false, unique: true },
   as: "cover",
+  onDelete: "cascade",
+});
+Review.belongsTo(Book, {
+  foreignKey: { name: "book_isbn", allowNull: false },
+  as: "book",
+  onDelete: "cascade",
+});
+Review.belongsTo(Customer, {
+  foreignKey: { name: "customer_id", allowNull: false },
+  as: "customer",
   onDelete: "cascade",
 });
 
@@ -106,4 +132,6 @@ module.exports = {
   Order,
   OrderDetail,
   BookCover,
+  FavouriteBook,
+  Review
 };

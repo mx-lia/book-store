@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 
 import AdminHeader from "../../components/AdminLayout/AdminHeader";
-import AdminFooter from "../../components/AdminLayout/AdminFooter";
 import CardButton from "../../components/AdminLayout/CardButton";
 import DataGrid from "../../components/DataGrid";
 
@@ -24,46 +23,50 @@ const AdminDashboard = () => {
         title={"Books"}
         subtitle={`You currently have ${totalCount} in the catalog!`}
       />
-      <Container fluid as="main" className="my-3 min-vh-100" role="main">
+      <Container fluid as="main" className="my-3" role="main">
         <Row>
           <Col>
-            <p className="border-bottom">Overview</p>
+            <h5 className="border-bottom py-1">Overview</h5>
           </Col>
         </Row>
         <Row className="my-3">
           <Col xs={12} md className="mb-2 mb-md-0">
             <CardButton
               title={totalCount}
-              subtitle={"all books"}
-              icon={<CircleIcon />}
+              subtitle={"ALL BOOKS"}
+              icon={<CircleIcon fill="#cce4ff" />}
+              color="text-primary"
             />
           </Col>
           <Col xs={12} md className="mb-2 mb-md-0">
             <CardButton
               title={availableCount}
-              subtitle={"available books"}
-              icon={<AvailableIcon />}
+              subtitle={"IN STOCK"}
+              icon={<AvailableIcon fill="#fff2cd" />}
+              color="text-warning"
             />
           </Col>
           <Col xs={12} md className="mb-2 mb-md-0">
             <CardButton
               title={notAvailableCount}
-              subtitle={"not available books"}
-              icon={<NotAvailableIcon />}
+              subtitle={"OUT OF STOCK"}
+              icon={<NotAvailableIcon fill="#f8d6d9" />}
+              color="text-danger"
             />
           </Col>
           <Col xs={12} md className="mb-2 mb-md-0">
             <CardButton
-              title={<AddIcon width="22px" height="22px" />}
-              subtitle={"new book"}
-              icon={<InboxIcon />}
+              title={<AddIcon width="22px" height="22px" fill="#28a745" />}
+              subtitle={"NEW BOOK"}
+              icon={<InboxIcon fill="#d4edd9" />}
               href={"/admin/dashboard/newbook"}
+              color="text-success"
             />
           </Col>
         </Row>
         <Row>
           <Col>
-            <p className="border-bottom">Books ({totalCount})</p>
+            <h5 className="border-bottom py-1">Books ({totalCount})</h5>
           </Col>
         </Row>
         <Row className="my-3">
@@ -76,7 +79,6 @@ const AdminDashboard = () => {
           </Col>
         </Row>
       </Container>
-      <AdminFooter />
     </div>
   );
 };

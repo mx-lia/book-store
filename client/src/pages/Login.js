@@ -1,34 +1,44 @@
 import React, { useContext } from "react";
+import { Link } from "react-router-dom";
+
+import { Context as CustomerContext } from "../context/customerContext";
 
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { Formik } from "formik";
 import * as yup from "yup";
 
-import { Link } from "react-router-dom";
-
 import { ReactComponent as TwitterIcon } from "../assets/twitter.svg";
 import { ReactComponent as FacebookIcon } from "../assets/facebook.svg";
 import { ReactComponent as GoogleIcon } from "../assets/google.svg";
 
-import { Context as CustomerContext } from "../context/customerContext";
-
 const registerSchema = yup.object({
   firstName: yup.string().required(),
   lastName: yup.string().required(),
-  email: yup.string().required(),
+  email: yup.string().email().required(),
   password: yup.string().required(),
 });
 
 const loginSchema = yup.object({
-  email: yup.string().required(),
+  email: yup.string().email().required(),
   password: yup.string().required(),
 });
 
 const Login = () => {
-  const { signIn, signUp } = useContext(CustomerContext);
+  const {
+    state: { error },
+    signIn,
+    signUp,
+  } = useContext(CustomerContext);
 
   return (
     <Container fluid as="main" className="my-3" role="main">
+      {error && (
+        <Row>
+          <Col>
+            <div>{error}</div>
+          </Col>
+        </Row>
+      )}
       <Row className="mx-0 justify-content-center">
         <Col xs={12} md={5} className="panel mb-3 mb-md-0">
           <Formik
@@ -40,6 +50,7 @@ const Login = () => {
             onSubmit={async (values, actions) => {
               await signIn(values);
               actions.setSubmitting(false);
+              actions.resetForm();
             }}
           >
             {({ handleChange, handleSubmit, values, errors, isSubmitting }) => (
@@ -86,6 +97,7 @@ const Login = () => {
                 </Form.Row>
                 <Form.Row className="justify-content-center">
                   <Link
+                    to="#"
                     className="social-margin mx-1"
                     onClick={() => {
                       window.open("http://localhost:4000/auth/google", "_self");
@@ -126,6 +138,7 @@ const Login = () => {
             onSubmit={async (values, actions) => {
               await signUp(values);
               actions.setSubmitting(false);
+              actions.resetForm();
             }}
           >
             {({ handleChange, handleSubmit, values, errors, isSubmitting }) => (

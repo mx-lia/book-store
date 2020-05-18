@@ -25,9 +25,9 @@ async function update(id, publisherParams) {
     const publisher = await Publisher.findByPk(id);
     if (!publisher) throw 'Publisher not found';
     Object.assign(publisher, publisherParams);
-    await publisher.save();
+    return await publisher.save();
 }
 
 async function remove(id) {
-    await Publisher.destroy({ where: { id } });
+    return await Publisher.destroy({ where: { id } });
 }

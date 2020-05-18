@@ -13,6 +13,8 @@ const genreRouter = require("./routes/genre-router");
 const publisherRouter = require("./routes/publisher-router");
 const authorRouter = require("./routes/author-router");
 const orderRouter = require("./routes/order-router");
+const favouriteBookRouter = require("./routes/favourite-book-router");
+const reviewRouter = require("./routes/review-router");
 
 app.use(passport.initialize());
 app.use(cors());
@@ -30,5 +32,9 @@ app.use(genreRouter);
 app.use(publisherRouter);
 app.use(authorRouter);
 app.use(orderRouter);
+app.use(favouriteBookRouter);
+app.use(reviewRouter);
+
+require("./middlewares/error");
 
 app.listen(serverConfig.PORT);

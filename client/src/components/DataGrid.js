@@ -38,7 +38,7 @@ const DataGrid = ({
       );
       setPages(pages);
     })();
-  }, []);
+  }, [currentPage, params.genre, params.orderBy, setAvailableCount, setNotAvailableCount, setTotalCount]);
 
   return (
     <div>
@@ -71,12 +71,12 @@ const DataGrid = ({
                   <td>
                     {book.availableQuantity === 0 ? (
                       <Badge variant="danger">
-                        not available{" "}
+                        Out of stock{" "}
                         <Badge variant="light">{book.availableQuantity}</Badge>
                       </Badge>
                     ) : (
-                      <Badge variant="success">
-                        available{" "}
+                      <Badge variant="warning">
+                        In stock{" "}
                         <Badge variant="light">{book.availableQuantity}</Badge>
                       </Badge>
                     )}

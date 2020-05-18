@@ -1,58 +1,65 @@
 import serverCall from "./serverCall";
-import Cookies from "js-cookie";
 
 export const signUp = (dispatch) => async (user) => {
   try {
-    dispatch({ type: "SIGNUP_USER_LOADING" });
-    const res = await serverCall("/auth/signup", { body: user });
+    dispatch({ type: "LOADING" });
+    await serverCall("/auth/signup", { body: user });
     dispatch({ type: "SIGNUP_USER_SUCCESS" });
-    return res;
-  } catch (err) {}
+  } catch (err) {
+    dispatch({ type: "SET_ERROR", payload: { message: err.message } });
+  }
 };
 
 export const signIn = (dispatch) => async (user) => {
   try {
-    dispatch({ type: "SIGNIN_USER_LOADING" });
-    const res = await serverCall("/auth/signin", { body: user });
+    dispatch({ type: "LOADING" });
+    await serverCall("/auth/signin", { body: user });
     dispatch({ type: "SIGNIN_USER_SUCCESS" });
-    return res;
-  } catch (err) {}
+  } catch (err) {
+    dispatch({ type: "SET_ERROR", payload: { message: err.message } });
+  }
 };
 
 export const signOut = (dispatch) => async (history) => {
   try {
-    const res = await serverCall("/auth/signout");
-    history.push("/");
+    dispatch({ type: "LOADING" });
+    await serverCall("/auth/signout");
     dispatch({ type: "SIGNOUT_USER_SUCCESS" });
-  } catch (err) {}
+  } catch (err) {
+    dispatch({ type: "SET_ERROR", payload: { message: err.message } });
+  }
 };
 
 export const me = (dispatch) => async () => {
   try {
     dispatch({ type: "LOADING" });
     const res = await serverCall("/me");
-    res
-      ? dispatch({ type: "SET_USER_SUCCESS", payload: { user: res.user } })
-      : dispatch({ type: "SET_USER_FAILURE" });
-  } catch (err) {}
+    if (res)
+      dispatch({ type: "SET_USER_SUCCESS", payload: { user: res.user } });
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 export const setCurrentCustomer = (dispatch) => async () => {
   try {
-    dispatch({ type: "SET_USER_LOADING" });
+    dispatch({ type: "LOADING" });
     const res = await serverCall("/customer");
     dispatch({ type: "SET_USER_SUCCESS", payload: res });
-    return res;
-  } catch (err) {}
+  } catch (err) {
+    dispatch({ type: "SET_ERROR", payload: { message: err.message } });
+  }
 };
 
 export const updateCustomer = (dispatch) => async (customer) => {
   try {
-    dispatch({ type: "UPDATE_USER_LOADING" });
+    dispatch({ type: "LOADING" });
     const res = await serverCall("/customer", {
       method: "PUT",
       body: customer,
     });
-    return res;
-  } catch (err) {}
+    dispatch({ type: "SET_USER_SUCCESS", payload: res });
+  } catch (err) {
+    dispatch({ type: "SET_ERROR", payload: { message: err.message } });
+  }
 };

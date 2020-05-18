@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { useHistory } from "react-router-dom";
 
-import { Container, Row, Col, Form, Button, Image } from "react-bootstrap";
+import { Container, Row, Col, Button } from "react-bootstrap";
 
 import { ReactComponent as ExitIcon } from "../../assets/exit.svg";
 
@@ -9,7 +9,6 @@ import { Context as CustomerContext } from "../../context/customerContext";
 
 const AdminHeader = ({ title, subtitle }) => {
   const {
-    state: { user },
     signOut,
   } = useContext(CustomerContext);
 

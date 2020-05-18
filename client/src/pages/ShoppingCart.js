@@ -9,13 +9,13 @@ import { Context as ShoppingCartContext } from "../context/shoppingCartContext";
 
 const ShoppingCart = () => {
   const {
-    state: { books, isEmpty, totalSum },
+    state: { books, totalSum },
   } = useContext(ShoppingCartContext);
 
   return (
     <React.Fragment>
-      {!isEmpty && (
-        <Container fluid as="main" className="my-3 min-vh-100" role="main">
+      {books.length !== 0 && (
+        <Container fluid as="main" className="my-3" role="main">
           <h4 className="my-3">Your shopping cart</h4>
           {books.map((element) => (
             <ShoppingCartItem
@@ -50,7 +50,7 @@ const ShoppingCart = () => {
           </Card>
         </Container>
       )}
-      {isEmpty && <EmptyCart />}
+      {books.length === 0 && <EmptyCart />}
     </React.Fragment>
   );
 };

@@ -5,9 +5,6 @@ import { Container, Row, Col, Button, Form, ListGroup } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
 import * as queryString from "query-string";
 
-import { ReactComponent as ArrowDownIcon } from "../assets/arrow_down.svg";
-import { ReactComponent as ArrowUpIcon } from "../assets/arrow_up.svg";
-
 import BookCard from "../components/BookCard";
 import Pagination from "../components/Pagination";
 
@@ -124,7 +121,7 @@ const Books = () => {
           </Col>
           <Col className="panel shadow-sm py-2 mt-2">
             <div className="d-flex border-bottom align-items-center justify-content-between">
-              <h5>Filter by categories</h5>
+              <h5>Filter by genres</h5>
             </div>
             <ListGroup variant="flush">
               <ListGroup.Item
@@ -155,7 +152,7 @@ const Books = () => {
                       genre: genre.name,
                     })
                   }
-                  className="p-0"
+                  className="p-0 text-capitalize"
                 >
                   {genre.name}
                 </ListGroup.Item>
@@ -178,7 +175,7 @@ const Books = () => {
             <div className="d-block panel border-bottom">
               <Row className="px-3 align-items-center">
                 <Col xs={12} xl="auto" className=" text-nowrap mr-auto my-3">
-                  Showing {currentPage == 1 ? 1 : (currentPage - 1) * 30 + 1} to{" "}
+                  Showing {currentPage === 1 ? 1 : (currentPage - 1) * 30 + 1} to{" "}
                   {(currentPage - 1) * 30 + books.length} of {count} results
                 </Col>
                 <div className="col-auto my-3">

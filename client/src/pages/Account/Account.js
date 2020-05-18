@@ -2,11 +2,11 @@ import React from "react";
 
 import { Container, Row, Col, ListGroup } from "react-bootstrap";
 
-import { BrowserRouter as Router, Switch } from "react-router-dom";
+import { Switch } from "react-router-dom";
 import UserPrivateRoute from "../../components/PrivateRoutes/UserPrivateRoute";
 
 import PersonalInfo from "./PersonalInfo";
-import Favorites from "./Favorites";
+import Favourites from "./Favourites";
 import OrderHistory from "./OrderHistory";
 
 const Account = () => {
@@ -26,13 +26,13 @@ const Account = () => {
               >
                 Personal Info
               </ListGroup.Item>
-{/*               <ListGroup.Item
+              <ListGroup.Item
                 action
-                href="/account/favorites"
+                href="/account/favourites"
                 className="px-0 py-1"
               >
-                Favorites
-              </ListGroup.Item> */}
+                Favourites
+              </ListGroup.Item>
               <ListGroup.Item
                 action
                 href="/account/history"
@@ -50,11 +50,11 @@ const Account = () => {
               path="/account/personal"
               component={PersonalInfo}
             />
-{/*             <UserPrivateRoute
+            <UserPrivateRoute
               exact
-              path="/account/favorites"
-              component={Favorites}
-            /> */}
+              path="/account/favourites"
+              component={Favourites}
+            />
             <UserPrivateRoute
               exact
               path="/account/history"

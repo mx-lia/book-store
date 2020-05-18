@@ -20,7 +20,7 @@ passport.use(
         });
         return done(null, customer);
       } catch (error) {
-        done(error);
+        done(null, false, { message: error.message });
       }
     }
   )

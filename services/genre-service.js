@@ -25,9 +25,9 @@ async function update(id, genreParams) {
     const genre = await Genre.findByPk(id);
     if (!genre) throw 'Genre not found';
     Object.assign(genre, genreParams);
-    await genre.save();
+    return await genre.save();
 }
 
 async function remove(id) {
-    await Genre.destroy({ where: { id } });
+    return await Genre.destroy({ where: { id } });
 }

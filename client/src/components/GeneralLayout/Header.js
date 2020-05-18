@@ -1,16 +1,17 @@
-import React, { useContext, useEffect } from "react";
-
-import Logo from "../../assets/logo.svg";
-import { ReactComponent as AccountIcon } from "../../assets/account.svg";
-import { ReactComponent as BasketIcon } from "../../assets/basket.svg";
-import { ReactComponent as ExitIcon } from "../../assets/exit.svg";
+import React, { useContext } from "react";
 import { useHistory } from "react-router-dom";
+
 import { Context as CustomerContext } from "../../context/customerContext";
 import { Context as ShoppingCartContext } from "../../context/shoppingCartContext";
 
 import { Container, Navbar, Nav, Button, Image } from "react-bootstrap";
 
+import { ReactComponent as AccountIcon } from "../../assets/account.svg";
+import { ReactComponent as BasketIcon } from "../../assets/basket.svg";
+import { ReactComponent as ExitIcon } from "../../assets/exit.svg";
+
 import Search from "./Search";
+import Logo from "../../assets/logo.svg";
 
 const Header = () => {
   const {
@@ -27,7 +28,7 @@ const Header = () => {
   return (
     <header>
       <Container fluid>
-        <Navbar className="flex-wrap flex-md-nowrap justify-content-between px-0">
+        <Navbar className="flex-wrap flex-md-nowrap justify-content-between px-0 py-3">
           <Navbar.Brand className="col-md-3 col px-0 mx-0" href="/">
             <Image width="200px" src={Logo} />
           </Navbar.Brand>
@@ -39,10 +40,10 @@ const Header = () => {
             <AccountIcon fill="#fff" className={user ? "" : "mr-md-1"} />
             <span className="hidden-text">{user ? "" : "Sign in/Join"}</span>
           </Button>
-          {user && (
-            <Button
+            {user && (
+              <Button
               variant="primary"
-              className="d-inline-flex align-items-center order-md-3 ml-md-2"
+              className="d-inline-flex align-items-center order-md-3 ml-2"
               onClick={() => {
                 signOut(history);
               }}
@@ -73,7 +74,7 @@ const Header = () => {
             </Nav>
           </div>
           <div className="basket-panel d-flex flex-row align-items-center">
-            <div className="text-light text-nowrap border-right px-3">
+            <div className="text-white text-nowrap border-right px-4">
               {totalSum} $
             </div>
             <div>

@@ -270,5 +270,5 @@ async function update(isbn, updatedBook, files) {
 }
 
 async function remove(isbn) {
-  await Book.destroy({ where: { isbn: isbn } });
+  return await Book.destroy({ where: { isbn: isbn } });
 }

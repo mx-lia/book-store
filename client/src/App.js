@@ -1,14 +1,8 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import CustomerProvider from "./context/customerContext";
-import { Provider as ShoppingCartProvider } from "./context/shoppingCartContext";
-
-import "./App.css";
+import ShoppingCartProvider from "./context/shoppingCartContext";
 
 import AdminPrivateRoute from "./components/PrivateRoutes/AdminPrivateRoute";
 import UserPrivateRoute from "./components/PrivateRoutes/UserPrivateRoute";
@@ -26,58 +20,67 @@ import AdminLogin from "./pages/Admin/AdminLogin";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 import DashboardBook from "./pages/Admin/DashboardBook";
 
+import "./App.css";
+
 const AdminApp = () => (
-  <Switch>
-    <Route exact path="/admin">
-      <AdminLogin />
-    </Route>
-    <AdminPrivateRoute
-      exact
-      path="/admin/dashboard"
-      component={AdminDashboard}
-    />
-    <AdminPrivateRoute
-      exact
-      path="/admin/dashboard/newbook"
-      component={DashboardBook}
-    />
-    <AdminPrivateRoute
-      exact
-      path="/admin/dashboard/book/:isbn"
-      component={DashboardBook}
-    />
-  </Switch>
+  <React.Fragment>
+    <div className="flex-grow-1">
+      <Switch>
+        <Route exact path="/admin">
+          <AdminLogin />
+        </Route>
+        <AdminPrivateRoute
+          exact
+          path="/admin/dashboard"
+          component={AdminDashboard}
+        />
+        <AdminPrivateRoute
+          exact
+          path="/admin/dashboard/newbook"
+          component={DashboardBook}
+        />
+        <AdminPrivateRoute
+          exact
+          path="/admin/dashboard/book/:isbn"
+          component={DashboardBook}
+        />
+      </Switch>
+    </div>
+    <Footer />
+  </React.Fragment>
 );
 
 const CustomerApp = () => (
   <ShoppingCartProvider>
     <Header />
-    <Switch>
-      <Route exact path="/">
-        <Home />
-      </Route>
-      <Route exact path="/book/:isbn">
-        <BookDetails />
-      </Route>
-      <Route exact path="/shoppingcart">
-        <Basket />
-      </Route>
-      <Route exact path="/login">
-        <Login />
-      </Route>
-      <UserPrivateRoute path="/account" component={Account} />
-      <Route exact path="/books">
-        <Books />
-      </Route>
-      <UserPrivateRoute exact path="/checkout" component={OrderCheckout} />
-    </Switch>
+    <div className="flex-grow-1">
+      <Switch>
+        <Route exact path="/">
+          <Home />
+        </Route>
+        <Route exact path="/book/:isbn">
+          <BookDetails />
+        </Route>
+        <Route exact path="/shoppingcart">
+          <Basket />
+        </Route>
+        <Route exact path="/login">
+          <Login />
+        </Route>
+        <UserPrivateRoute path="/account" component={Account} />
+        <Route exact path="/books">
+          <Books />
+        </Route>
+        <UserPrivateRoute exact path="/checkout" component={OrderCheckout} />
+      </Switch>
+    </div>
     <Footer />
   </ShoppingCartProvider>
 );
 
 export default () => {
   return (
-    <div className="App">
+    <div className="d-flex flex-column min-vh-100">
       <Router>
         <CustomerProvider>
           <Switch>

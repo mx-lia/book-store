@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 
 import { Container, Row, Col, Image, Button } from "react-bootstrap";
+import Reviews from "../components/Reviews";
+
 import { ReactComponent as AvailableIcon } from "../assets/available.svg";
+import { ReactComponent as NotAvailableIcon } from "../assets/not-available.svg";
 import { ReactComponent as ShippingIcon } from "../assets/shipping.svg";
 
 import { useParams } from "react-router-dom";
@@ -9,13 +12,15 @@ import { Context as CustomerContext } from "../context/customerContext";
 import { Context as ShoppingCartContext } from "../context/shoppingCartContext";
 
 import { getBook } from "../actions/bookActions";
+import { createFavourite } from "../actions/favouriteBookActions";
 
 const BookDetails = () => {
   const [book, setBook] = useState();
+  const [inCart, setInCart] = useState(false);
   const {
     state: { user },
   } = useContext(CustomerContext);
-  const { addItem } = useContext(ShoppingCartContext);
+  const { addItem, isInCart } = useContext(ShoppingCartContext);
 
   const { isbn } = useParams();
 
@@ -23,7 +28,8 @@ const BookDetails = () => {
     (async () => {
       setBook(await getBook(isbn));
     })();
-  }, []);
+    setInCart(isInCart(isbn));
+  }, [isbn]);
 
   return (
     <Container fluid as="main" className="my-3" role="main">
@@ -66,25 +72,37 @@ const BookDetails = () => {
                 <ShippingIcon width="32" height="32" className="mr-1" />
                 Free delivery worldwide
               </div>
-              <div className="d-inline-flex align-items-center my-3">
-                <AvailableIcon width="32" height="32" className="mr-1" />
-                Available
-              </div>
+              {book.availableQuantity === 0 ? (
+                <div className="d-inline-flex align-items-center my-3">
+                  <NotAvailableIcon width="32" height="32" className="mr-1" />
+                  Out of stock
+                </div>
+              ) : (
+                <div className="d-inline-flex align-items-center my-3">
+                  <AvailableIcon width="32" height="32" className="mr-1" />
+                  In stock
+                </div>
+              )}
               <div className="border-top py-3">
                 <Button
-                  type="submit"
                   className="w-100 mt-2"
-                  onClick={() => addItem(book)}
+                  disabled={
+                    book.availableQuantity === 0 || inCart ? true : false
+                  }
+                  onClick={() => {
+                    addItem(book);
+                    setInCart(true);
+                  }}
                 >
-                  Add to basket
+                  {inCart ? "Book is already in cart" : "Add to cart"}
                 </Button>
                 <Button
-                  href={user ? "/basket" : "/login"}
                   variant="light"
-                  type="submit"
                   className="w-100 mt-2"
+                  disabled={user ? false : true}
+                  onClick={() => createFavourite(book.isbn)}
                 >
-                  Add to wishlist
+                  {user ? "Add to favourites" : "Favourites is blocked for guests"}
                 </Button>
               </div>
             </div>
@@ -115,6 +133,7 @@ const BookDetails = () => {
           </Col>
         </Row>
       )}
+      {book && <Reviews isbn={book.isbn} />}
     </Container>
   );
 };

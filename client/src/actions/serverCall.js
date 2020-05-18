@@ -1,7 +1,10 @@
-export default function serverCall(endpoint, { body, header: method, ...customConfig } = {}) {
+export default function serverCall(
+  endpoint,
+  { body, header: method, ...customConfig } = {}
+) {
   const headers = { "content-type": "application/json" };
   const config = {
-    method: method? method: body ? "POST" : "GET",
+    method: method ? method : body ? "POST" : "GET",
     ...customConfig,
     headers: {
       ...headers,
@@ -12,18 +15,17 @@ export default function serverCall(endpoint, { body, header: method, ...customCo
     config.body = JSON.stringify(body);
   }
   return window.fetch(endpoint, config).then(async (response) => {
-    if (response.status === 401) {
-      return;
-    }
     if (response.redirected) {
       window.location.href = response.url;
       return;
     }
-    const data = await response.json();
+    if (response.status === 500) throw new Error("Something wrong");
+    if (response.status === 401) return;
     if (response.ok) {
+      const data = await response.json();
       return data;
     } else {
-      return Promise.reject(data);
+      return Promise.reject();
     }
   });
 }

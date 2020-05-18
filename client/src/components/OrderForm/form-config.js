@@ -1,18 +1,5 @@
 import * as yup from "yup";
 
-export const initialValues = {
-  firstName: "",
-  lastName: "",
-  email: "",
-  password: "",
-  postalCode: "",
-  street: "",
-  buildingNo: "",
-  flatNo: "",
-  city: "",
-  phoneNumber: "",
-};
-
 export const validationSchema = yup.object({
   firstName: yup.string().required("Permission type is required").nullable(),
   lastName: yup.string().required("Permission type is required").nullable(),

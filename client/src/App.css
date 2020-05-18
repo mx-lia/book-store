@@ -1,4 +1,4 @@
-body {
+body{
   background-color: #f0f0f0;
 }
 input[type="text"],
@@ -21,7 +21,6 @@ select {
   border-color: transparent;
   box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.25);
 }
-
 header,
 footer {
   background-color: #403042;
@@ -53,11 +52,9 @@ section,
   color: #fff;
   box-shadow: none;
 }
-
 .btn-md {
   padding: 10px 20px;
 }
-
 .nav-link,
 .nav-link:hover {
   color: black;
@@ -157,7 +154,6 @@ hr {
   background-color: #ffffff;
   color: #dd4b39;
 }
-
 @media screen and (max-width: 768px) {
   .hidden-text {
     display: none;

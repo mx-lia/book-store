@@ -70,17 +70,20 @@ export const getBook = async (isbn) => {
 export const createBook = async (values) => {
   try {
     const res = await fetch("/book/new", { method: "POST", body: createFormData(values) });
+    return res;
   } catch (err) {}
 };
 
 export const updateBook = async (values) => {
   try {
     const res = await fetch(`/book/${values.isbn}`, { method: "PUT", body: createFormData(values) });
+    return res;
   } catch (err) {}
 };
 
 export const deleteBook = async (isbn) => {
   try {
     const res = await serverCall(`/book/${isbn}`, { method: "DELETE" });
+    return res;
   } catch (err) {}
 };

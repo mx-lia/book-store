@@ -5,14 +5,16 @@ import noImage from "../../assets/noimage.png";
 
 import { getBook } from "../../actions/bookActions";
 
-const OrderItem = ({ orderDetail }) => {
+const OrderItem = ({ orderDetail, totalSum, setTotalSum }) => {
   const [book, setBook] = useState();
 
   useEffect(() => {
     (async () => {
-      setBook(await getBook(orderDetail.book));
+      const book = await getBook(orderDetail.book);
+      setBook(book);
+      setTotalSum(totalSum + orderDetail.amount * book.price);
     })();
-  }, []);
+  }, [orderDetail.book, orderDetail.amount, setTotalSum]);
 
   return (
     <React.Fragment>

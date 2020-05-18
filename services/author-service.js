@@ -25,9 +25,9 @@ async function update(id, authorParams) {
     const author = await Author.findByPk(id);
     if (!author) throw 'Author not found';
     Object.assign(author, authorParams);
-    await author.save();
+    return await author.save();
 }
 
 async function remove(id) {
-    await Author.destroy({ where: { id } });
+    return await Author.destroy({ where: { id } });
 }

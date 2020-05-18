@@ -81,6 +81,19 @@ export const decrementItem = (dispatch) => (book) => {
       return object;
     });
     localStorage.setItem("shoppingCart", JSON.stringify(booksInCart));
-    dispatch({ type: "DECREMENT_ITEM_SUCCESS", payload: booksInCart, price: book.price });
+    dispatch({
+      type: "DECREMENT_ITEM_SUCCESS",
+      payload: booksInCart,
+      price: book.price,
+    });
+  } catch (err) {}
+};
+
+export const isInCart = () => (isbn) => {
+  try {
+    let booksInCart = JSON.parse(localStorage.getItem("shoppingCart"));
+    booksInCart = booksInCart.filter((value) => value.book.isbn === isbn);
+    if (booksInCart && booksInCart.length !== 0) return true;
+    else return false;
   } catch (err) {}
 };

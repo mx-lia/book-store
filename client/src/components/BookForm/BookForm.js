@@ -23,6 +23,7 @@ import {
   getBook,
 } from "../../actions/bookActions";
 
+import { ReactComponent as DeleteIcon } from "../../assets/delete.svg";
 import noImage from "../../assets/noimage.png";
 
 import DatePicker from "./form-components/DatePicker";
@@ -74,6 +75,7 @@ const BookForm = ({ isbn }) => {
               let res;
               if (isbn) res = await updateBook(values);
               else res = await createBook(values);
+              window.location.href = "/admin/dashboard";
             }}
             initialValues={book}
             validationSchema={bookSchema}
@@ -92,20 +94,18 @@ const BookForm = ({ isbn }) => {
                 onSubmit={handleSubmit}
                 className="p-3"
               >
-                <Form.Row className="justify-content-between">
-                  <Col xs="auto">
-                    <h5 className="m-0">Information</h5>
-                  </Col>
+                <Form.Row className="justify-content-end">
                   {isbn && (
                     <Col xs="auto" className="ml-auto">
                       <Button
-                        variant="outline-danger"
+                        variant="danger"
+                        className="d-inline-flex align-items-center"
                         onClick={async () => {
-                          deleteBook(values.isbn);
+                          await deleteBook(values.isbn);
                           window.location.href = "/admin/dashboard";
                         }}
                       >
-                        delete this book
+                        <DeleteIcon fill="#fff" />
                       </Button>
                     </Col>
                   )}
@@ -132,8 +132,11 @@ const BookForm = ({ isbn }) => {
                       label="Custom file input"
                       custom
                       onChange={(event) => {
-                        setCover(URL.createObjectURL(event.target.files[0]));
-                        setFieldValue("cover", event.currentTarget.files[0]);
+                        const img = event.target.files[0];
+                        if (img) {
+                          setCover(URL.createObjectURL(img));
+                          setFieldValue("cover", img);
+                        }
                       }}
                     />
                   </Form.Group>
@@ -145,7 +148,7 @@ const BookForm = ({ isbn }) => {
                     className="d-flex flex-column justify-content-between"
                   >
                     <Form.Row>
-                      <Form.Group as={Col}>
+                      <Form.Group as={Col} xs={12} sm={12} md xl>
                         <Form.Label>ISBN</Form.Label>
                         <Form.Control
                           name="isbn"
@@ -160,7 +163,7 @@ const BookForm = ({ isbn }) => {
                           {errors.isbn}
                         </Form.Control.Feedback>
                       </Form.Group>
-                      <Form.Group as={Col}>
+                      <Form.Group as={Col} xs={12} sm={12} md xl>
                         <Form.Label>Genres </Form.Label>
                         <Select
                           id="genres"
@@ -194,7 +197,7 @@ const BookForm = ({ isbn }) => {
                       </Form.Control.Feedback>
                     </Form.Group>
                     <Form.Row>
-                      <Form.Group as={Col} xs sm={12} md xl>
+                      <Form.Group as={Col} xs={12} sm={12} md xl>
                         <div className="d-flex justify-content-between">
                           <Form.Label>Author</Form.Label>
                         </div>
@@ -232,7 +235,7 @@ const BookForm = ({ isbn }) => {
                       </Form.Group>
                     </Form.Row>
                     <Form.Row>
-                      <Form.Group as={Col}>
+                      <Form.Group as={Col} xs={12} sm={12} md xl>
                         <Form.Label>Language</Form.Label>
                         <Form.Control
                           name="language"
@@ -246,7 +249,7 @@ const BookForm = ({ isbn }) => {
                           {errors.language}
                         </Form.Control.Feedback>
                       </Form.Group>
-                      <Form.Group as={Col}>
+                      <Form.Group as={Col} xs={12} sm={12} md xl>
                         <Form.Label>Publication date</Form.Label>
                         <DatePicker
                           name="publicationDate"
@@ -255,7 +258,7 @@ const BookForm = ({ isbn }) => {
                       </Form.Group>
                     </Form.Row>
                     <Form.Row>
-                      <Form.Group as={Col}>
+                      <Form.Group as={Col} xs={12} sm={12} md xl>
                         <Form.Label>Format</Form.Label>
                         <Form.Control
                           name="format"
@@ -269,7 +272,7 @@ const BookForm = ({ isbn }) => {
                           {errors.format}
                         </Form.Control.Feedback>
                       </Form.Group>
-                      <Form.Group as={Col}>
+                      <Form.Group as={Col} xs={12} sm={12} md xl>
                         <Form.Label>Pages</Form.Label>
                         <Form.Control
                           name="pages"
@@ -285,7 +288,7 @@ const BookForm = ({ isbn }) => {
                       </Form.Group>
                     </Form.Row>
                     <Form.Row>
-                      <Form.Group as={Col}>
+                      <Form.Group as={Col} xs={12} sm={12} md xl>
                         <Form.Label>Price</Form.Label>
                         <InputGroup>
                           <InputGroup.Prepend>
@@ -303,7 +306,7 @@ const BookForm = ({ isbn }) => {
                           </Form.Control.Feedback>
                         </InputGroup>
                       </Form.Group>
-                      <Form.Group as={Col}>
+                      <Form.Group as={Col} xs={12} sm={12} md xl>
                         <Form.Label>Quantity</Form.Label>
                         <InputGroup>
                           <InputGroup.Prepend>

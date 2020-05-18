@@ -46,9 +46,10 @@ async function create(customer) {
 }
 
 async function update(id, customer) {
-  return await Customer.update(customer, {
+  await Customer.update(customer, {
     where: { id: id },
   });
+  return customer;
 }
 
 async function remove(id) {

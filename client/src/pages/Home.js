@@ -20,13 +20,11 @@ const Home = () => {
     <Container fluid as="main" className="my-3" role="main">
       <Jumbotron className="text-light">
         <Col md={6}>
-          <h1 className="display-4 font-italic">
-            Title of a longer featured blog post
-          </h1>
+          <h1 className="display-4 font-italic">Read around the world</h1>
           <p className="lead">
-            Multiple lines of text that form the lede, informing new readers
-            quickly and efficiently about what's most interesting in this post's
-            contents.
+            Book Livraria is a leading international book retailer with a unique
+            offer over 20 million books and free delivery worldwide (with no
+            minimum spend).
           </p>
         </Col>
       </Jumbotron>

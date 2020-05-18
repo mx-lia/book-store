@@ -1,6 +1,6 @@
 module.exports = (sequelize, type) => {
   return sequelize.define(
-    "orders",
+    "reviews",
     {
       id: {
         type: type.INTEGER,
@@ -9,11 +9,12 @@ module.exports = (sequelize, type) => {
       },
       date: {
         type: type.DATEONLY,
-        allowNull: false,
         defaultValue: sequelize.fn("GETDATE"),
-        validate: {
-          max: sequelize.fn("GETDATE"),
-        },
+        allowNull: false,
+      },
+      text: {
+        type: type.STRING,
+        allowNull: false,
       },
     },
     {

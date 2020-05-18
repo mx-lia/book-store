@@ -14,7 +14,7 @@ const QuantityControl = ({ book, quantity }) => {
     <InputGroup className="quantity-control">
       <InputGroup.Prepend>
         <Button
-          variant="outline-secondary"
+          variant="primary"
           className="d-inline-flex align-items-center"
           onClick={() => decrementItem(book)}
         >
@@ -24,7 +24,7 @@ const QuantityControl = ({ book, quantity }) => {
       <Form.Control type="text" value={quantity} />
       <InputGroup.Append>
         <Button
-          variant="outline-secondary"
+          variant="primary"
           className="d-inline-flex align-items-center"
           onClick={() => incrementItem(book)}
         >

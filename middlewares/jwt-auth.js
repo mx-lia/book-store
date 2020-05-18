@@ -25,7 +25,7 @@ passport.use(
         });
         return done(null, customer);
       } catch (error) {
-        done(error);
+        return done(error);
       }
     }
   )
@@ -42,24 +42,24 @@ passport.use(
       try {
         const customer = await customerService.getByEmail(email);
         if (!customer) {
-          return done(null, false, { message: "User not found" });
+          return done(new Error("User not found"));
         }
         const validate = await customer.isValidPassword(password);
         if (!validate) {
-          return done(null, false, { message: "Wrong Password" });
+          return done(new Error("Passwort is wrong"));
         }
         return done(null, customer);
       } catch (error) {
-        done(error);
+        return done(error);
       }
     }
   )
 );
 
-const cookieExtractor = function(req) {
+const cookieExtractor = function (req) {
   var token = null;
   if (req && req.cookies) {
-      token = req.cookies['jwt'];
+    token = req.cookies["jwt"];
   }
   return token;
 };

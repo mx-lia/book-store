@@ -14,6 +14,7 @@ module.exports = (sequelize, type) => {
       publicationDate: {
         type: type.DATEONLY,
         field: "publication_date",
+        allowNull: false,
       },
       language: { type: type.STRING(15), allowNull: false },
       format: {
@@ -26,7 +27,9 @@ module.exports = (sequelize, type) => {
         validate: {
           isGreaterThanZero(value) {
             if (parseInt(value) <= 0) {
-              throw new Error("Amount of pages must be greater or equal than zero.");
+              throw new Error(
+                "Amount of pages must be greater or equal than zero."
+              );
             }
           },
         },

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useContext } from "react";
 
 import { Container, Row, Col } from "react-bootstrap";
 
@@ -8,7 +8,7 @@ import { Context as ShoppingCartContext } from "../context/shoppingCartContext";
 
 const OrderCheckout = () => {
   const {
-    state: { books, isEmpty, totalSum, totalCount },
+    state: { books, totalSum, totalCount },
   } = useContext(ShoppingCartContext);
 
   return (

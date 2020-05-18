@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useEffect, useContext } from "react";
 
 import { Row, Col, Form, Button, InputGroup } from "react-bootstrap";
 
 import { Formik } from "formik";
-import { initialValues, validationSchema } from "./form-config";
+import { validationSchema } from "./form-config";
 
 import { Context as ShoppingCartContext } from "../../context/shoppingCartContext";
 import { Context as CustomerContext } from "../../context/customerContext";
@@ -20,13 +20,11 @@ const OrderForm = () => {
     state: { books },
   } = useContext(ShoppingCartContext);
 
-  const [customer, setCustomer] = useState(initialValues);
-
   useEffect(() => {
     (async () => {
       await setCurrentCustomer();
     })();
-  }, []);
+  }, [setCurrentCustomer]);
 
   return (
     <Formik
@@ -34,7 +32,7 @@ const OrderForm = () => {
       validationSchema={validationSchema}
       enableReinitialize={true}
       onSubmit={async (values) => {
-        const res = await createOrder(values, books);
+        await createOrder(values, books);
         window.location.href = "/account/history";
       }}
     >

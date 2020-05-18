@@ -10,9 +10,15 @@ import { ReactComponent as DeleteIcon } from "../../assets/delete.svg";
 import noImage from "../../assets/noimage.png";
 
 import { Context as ShoppingCartContext } from "../../context/shoppingCartContext";
+import { Context as CustomerContext } from "../../context/customerContext";
+
+import { createFavourite } from "../../actions/favouriteBookActions";
 
 const ShoppingCartItem = ({ book, quantity }) => {
   const { removeItem } = useContext(ShoppingCartContext);
+  const {
+    state: { user },
+  } = useContext(CustomerContext);
 
   return (
     <Card.Body className="panel shadow-sm my-1 py-2 px-3 rounded-0">
@@ -58,14 +64,16 @@ const ShoppingCartItem = ({ book, quantity }) => {
           <Card.Body>
             <div className="d-flex flex-row flex-md-column justify-content-between">
               <Button
-                variant="outline-danger"
+                variant="danger"
                 className="d-inline-flex align-items-center mb-md-1"
+                disabled={user ? false : true}
+                onClick={() => createFavourite(book.isbn)}
               >
-                <FavoriteIcon className="pr-md-1" />
+                <FavoriteIcon fill="#fff" className="pr-md-1" />
                 <span>Add to favorite</span>
               </Button>
               <Button
-                variant="outline-secondary"
+                variant="light"
                 className="d-inline-flex align-items-center mb-md-1"
                 onClick={() => removeItem(book)}
               >

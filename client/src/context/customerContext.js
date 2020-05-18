@@ -8,12 +8,12 @@ import {
   updateCustomer,
   me,
 } from "../actions/customerActions";
-import { withRouter } from "react-router-dom";
 
 export const Context = React.createContext();
 
 const CustomerProvider = ({ children }) => {
   const [state, dispatch] = React.useReducer(CustomerReducer, {
+    error: null,
     user: null,
     loading: false,
   });
@@ -36,4 +36,4 @@ const CustomerProvider = ({ children }) => {
   );
 };
 
-export default withRouter(CustomerProvider);
+export default CustomerProvider;

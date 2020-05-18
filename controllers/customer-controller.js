@@ -31,7 +31,7 @@ function authentificate(req, res, next) {
       else
         return res
           .cookie("jwt", token, options)
-          .redirect("http://localhost:3000/");
+          .redirect("http://localhost:3000/account/personal");
     });
   } catch (error) {
     return next(error);
@@ -42,7 +42,7 @@ function getById(req, res, next) {
   customerService
     .getById(req.user.id)
     .then((customer) =>
-      customer ? res.status(200).json({ user: customer }) : res.sendStatus(404)
+      customer ? res.status(200).json({ user: customer }) : res.sendStatus(500)
     )
     .catch((err) => next(err));
 }
@@ -50,7 +50,9 @@ function getById(req, res, next) {
 function update(req, res, next) {
   customerService
     .update(req.user.id, req.body)
-    .then(() => res.json({}))
+    .then((customer) =>
+      customer ? res.status(200).json({ user: customer }) : res.sendStatus(500)
+    )
     .catch((err) => next(err));
 }
 
