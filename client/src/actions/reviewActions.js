@@ -22,6 +22,5 @@ export const createReviewWebSocket = (ws, review, setError) => {
   try {
     ws.send(JSON.stringify(review));
   } catch (err) {
-    setError(err);
   }
 };

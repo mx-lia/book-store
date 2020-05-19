@@ -9,13 +9,14 @@ import { Context as ShoppingCartContext } from "../../context/shoppingCartContex
 
 const QuantityControl = ({ book, quantity }) => {
   const { incrementItem, decrementItem } = useContext(ShoppingCartContext);
-  
+
   return (
     <InputGroup className="quantity-control">
       <InputGroup.Prepend>
         <Button
           variant="primary"
           className="d-inline-flex align-items-center"
+          disabled={quantity === 1 ? true : false}
           onClick={() => decrementItem(book)}
         >
           <RemoveIcon width="16" height="16" />
@@ -26,6 +27,7 @@ const QuantityControl = ({ book, quantity }) => {
         <Button
           variant="primary"
           className="d-inline-flex align-items-center"
+          disabled={quantity === book.availableQuantity ? true : false}
           onClick={() => incrementItem(book)}
         >
           <AddIcon width="16" height="16" />

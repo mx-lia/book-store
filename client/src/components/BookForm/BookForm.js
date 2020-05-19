@@ -174,7 +174,7 @@ const BookForm = ({ isbn }) => {
                           errors={errors.genres}
                           items={genres}
                           setItems={setGenres}
-                          createItem={createGenre(setError)}
+                          createItem={createGenre}
                           closeMenuOnSelect={false}
                           isMulti
                           options={genres.map((element) => ({
@@ -209,7 +209,7 @@ const BookForm = ({ isbn }) => {
                           value={values.author}
                           items={authors}
                           setItems={setAuthors}
-                          createItem={createAuthor(setError)}
+                          createItem={createAuthor}
                           errors={errors.author}
                           components={animatedComponents}
                           options={authors.map((element) => ({
@@ -226,7 +226,7 @@ const BookForm = ({ isbn }) => {
                           value={values.publisher}
                           items={publishers}
                           setItems={setPublishers}
-                          createItem={createPublisher(setError)}
+                          createItem={createPublisher}
                           errors={errors.publisher}
                           components={animatedComponents}
                           options={publishers.map((element) => ({

@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import CreatableSelect from "react-select/creatable";
 import { useFormikContext } from "formik";
 
+import { ErrorContext } from "../../../context/errorContext";
+
 const CustomSelect = ({ errors, options, items, setItems, createItem, ...props }) => {
+  const { setError } = useContext(ErrorContext);
   const { setFieldValue, setFieldTouched } = useFormikContext();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -16,7 +19,7 @@ const CustomSelect = ({ errors, options, items, setItems, createItem, ...props }
 
   const handleCreate = async (inputValue) => {
     setIsLoading(true);
-    const newItem = await createItem(inputValue);
+    const newItem = await createItem(inputValue, setError);
     setItems(items.concat(newItem));
     setIsLoading(false);
   };

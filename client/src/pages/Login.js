@@ -89,7 +89,7 @@ const Login = () => {
                     to="#"
                     className="social-margin mx-1"
                     onClick={() => {
-                      window.open("http://localhost:4000/auth/google", "_self");
+                      window.open("https://localhost:4000/auth/google", "_self");
                     }}
                   >
                     <div className="social-icon google">

@@ -29,9 +29,11 @@ export const removeItem = (dispatch, setError) => (book) => {
   try {
     dispatch({ type: "REMOVE_ITEM_LOADING" });
     let booksInCart = JSON.parse(localStorage.getItem("shoppingCart"));
-    booksInCart = booksInCart.filter((value) => {
-      return value.book.isbn !== book.isbn;
-    });
+    booksInCart = booksInCart
+      ? booksInCart.filter((value) => {
+          return value.book.isbn !== book.isbn;
+        })
+      : booksInCart;
     localStorage.setItem("shoppingCart", JSON.stringify(booksInCart));
     dispatch({
       type: "REMOVE_ITEM_SUCCESS",
@@ -100,7 +102,9 @@ export const decrementItem = (dispatch, setError) => (book) => {
 export const isInCart = (setError) => (isbn) => {
   try {
     let booksInCart = JSON.parse(localStorage.getItem("shoppingCart"));
-    booksInCart = booksInCart.filter((value) => value.book.isbn === isbn);
+    booksInCart = booksInCart
+      ? booksInCart.filter((value) => value.book.isbn === isbn)
+      : booksInCart;
     if (booksInCart && booksInCart.length !== 0) return true;
     else return false;
   } catch (err) {

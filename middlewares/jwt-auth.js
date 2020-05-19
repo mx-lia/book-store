@@ -25,7 +25,7 @@ passport.use(
         });
         return done(null, customer);
       } catch (error) {
-        return done(error);
+        return req.res.status(500).json({ message: error.message });
       }
     }
   )
@@ -37,20 +37,30 @@ passport.use(
     {
       usernameField: "email",
       passwordField: "password",
+      passReqToCallback: true,
     },
-    async (email, password, done) => {
+    async (req, email, password, done) => {
       try {
         const customer = await customerService.getByEmail(email);
         if (!customer) {
-          return done(new Error("User not found"));
+          return req.res
+            .status(500)
+            .json({ message: "User with such email doesn't exist." });
         }
         const validate = await customer.isValidPassword(password);
+        if (validate === null) {
+          return req.res
+            .status(500)
+            .json({ message: "Your must auth via google." });
+        }
         if (!validate) {
-          return done(new Error("Passwort is wrong"));
+          return req.res
+            .status(500)
+            .json({ message: "Incorrect password. Try again." });
         }
         return done(null, customer);
       } catch (error) {
-        return done(error);
+        return req.res.status(500).json({ message: error.message });
       }
     }
   )
@@ -70,12 +80,13 @@ passport.use(
     {
       secretOrKey: JWT_SECRET,
       jwtFromRequest: cookieExtractor,
+      passReqToCallback: true,
     },
-    async (payload, done) => {
+    async (req, payload, done) => {
       try {
         return done(null, payload.user);
       } catch (error) {
-        done(error);
+        return req.res.status(500).json({ message: error.message });
       }
     }
   )

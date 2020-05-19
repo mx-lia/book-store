@@ -34,7 +34,7 @@ const ShoppingCart = () => {
                   </dl>
                   <dl className="d-flex flex-row text-nowrap">
                     <dt className="mr-3">Total</dt>
-                    <dd className="text-pink ml-auto">{totalSum} $</dd>
+                    <dd className="text-pink ml-auto">{Number.parseFloat(totalSum.toPrecision(4))} $</dd>
                   </dl>
                   <div className="d-flex flex-row justify-content-end">
                     <Button

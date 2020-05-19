@@ -5,28 +5,36 @@ const ShoppingCartReducer = (state, action) => {
         ...state,
         books: action.payload,
         totalCount: state.totalCount + 1,
-        totalSum: state.totalSum + action.price,
+        totalSum:
+          Number.parseFloat(state.totalSum.toPrecision(4)) +
+          Number.parseFloat(action.price.toPrecision(4)),
       };
     case "REMOVE_ITEM_SUCCESS":
       return {
         ...state,
         books: action.payload,
         totalCount: state.totalCount - 1,
-        totalSum: state.totalSum - action.price,
+        totalSum:
+          Number.parseFloat(state.totalSum.toPrecision(4)) -
+          Number.parseFloat(action.price.toPrecision(4)),
       };
     case "INCREMENT_ITEM_SUCCESS":
       return {
         ...state,
         books: action.payload,
         totalCount: state.totalCount + 1,
-        totalSum: state.totalSum + action.price,
+        totalSum:
+          Number.parseFloat(state.totalSum.toPrecision(4)) +
+          Number.parseFloat(action.price.toPrecision(4)),
       };
     case "DECREMENT_ITEM_SUCCESS":
       return {
         ...state,
         books: action.payload,
         totalCount: state.totalCount - 1,
-        totalSum: state.totalSum - action.price,
+        totalSum:
+          Number.parseFloat(state.totalSum.toPrecision(4)) -
+          Number.parseFloat(action.price.toPrecision(4)),
       };
     default:
       return state;

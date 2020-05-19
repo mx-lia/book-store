@@ -54,7 +54,7 @@ const ShoppingCartItem = ({ book, quantity }) => {
                 <QuantityControl book={book} quantity={quantity} />
               </div>
               <div className="d-flex flex-column">
-                <h4 className="text-pink">{book.price * quantity} $</h4>
+                <h4 className="text-pink">{Number.parseFloat((Number.parseFloat(book.price.toPrecision(4)) * quantity).toPrecision(4))} $</h4>
                 <small>
                   {book.price}$ x {quantity}
                 </small>

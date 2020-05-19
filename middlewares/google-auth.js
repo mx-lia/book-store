@@ -9,9 +9,10 @@ passport.use(
     {
       clientID: GoogleConfig.GOOGLE_CLIENT_ID,
       clientSecret: GoogleConfig.GOOGLE_CLIENT_SECRET,
-      callbackURL: "https://localhost:4000/auth/google/redirect"
+      callbackURL: "https://localhost:4000/auth/google/redirect",
+      passReqToCallback: true,
     },
-    async (accessToken, refreshToken, profile, done) => {
+    async (req, accessToken, refreshToken, profile, done) => {
       try {
         const customer = await customerService.findOrCreateByEmail({
           firstName: profile.name.givenName,
@@ -20,7 +21,7 @@ passport.use(
         });
         return done(null, customer);
       } catch (error) {
-        done(null, false, { message: error.message });
+        return req.res.status(500).json({ message: error.message });
       }
     }
   )

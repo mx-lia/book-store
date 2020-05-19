@@ -44,14 +44,14 @@ Book.belongsTo(Publisher, {
   onDelete: "cascade",
 });
 Book.belongsToMany(Genre, {
-  foreignKey: { name: "book", allowNull: false, },
+  foreignKey: { name: "book", allowNull: false },
   through: BookGenre,
   unique: false,
   onDelete: "cascade",
   onUpdate: "cascade",
 });
 Genre.belongsToMany(Book, {
-  foreignKey: { name: "genre", allowNull: false, },
+  foreignKey: { name: "genre", allowNull: false },
   through: BookGenre,
   unique: false,
   onDelete: "cascade",
@@ -63,21 +63,21 @@ Order.belongsTo(Customer, {
   onDelete: "cascade",
 });
 Order.belongsToMany(Book, {
-  foreignKey: { name: "order", allowNull: false, },
+  foreignKey: { name: "order", allowNull: false },
   through: OrderDetail,
   unique: false,
   onDelete: "cascade",
   onUpdate: "cascade",
 });
 Book.belongsToMany(Order, {
-  foreignKey: { name: "book", allowNull: false, },
+  foreignKey: { name: "book", allowNull: false },
   through: OrderDetail,
   unique: false,
   onDelete: "cascade",
   onUpdate: "cascade",
 });
 Customer.belongsToMany(Book, {
-  foreignKey: { name: "customer", allowNull: false, },
+  foreignKey: { name: "customer", allowNull: false },
   through: FavouriteBook,
   unique: false,
   onDelete: "cascade",
@@ -107,7 +107,9 @@ Review.belongsTo(Customer, {
 });
 
 Customer.prototype.isValidPassword = async function (password) {
-  const compare = await argon2.verify(this.password, password);
+  const compare = this.password
+    ? await argon2.verify(this.password, password)
+    : null;
   return compare;
 };
 
@@ -117,10 +119,10 @@ OrderDetail.afterCreate(async (details, options) => {
   book.save();
 });
 
-sequelize
+/* sequelize
   .sync({ force: true })
   .then((result) => {})
-  .catch((err) => console.log(err));
+  .catch((err) => console.log(err)); */
 
 module.exports = {
   Book,
@@ -133,5 +135,5 @@ module.exports = {
   OrderDetail,
   BookCover,
   FavouriteBook,
-  Review
+  Review,
 };

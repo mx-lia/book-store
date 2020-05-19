@@ -15,18 +15,18 @@ router.get("/book/:isbn", bookController.getByIsbn);
 
 router.post(
   "/book/new",
-  passport.authenticate("signup", { session: false }),
+  passport.authenticate("jwt", { session: false }),
   allowOnly(rolesConfig.ACCESS_LEVELS.admin, bookController.create)
 );
 
 router.put(
   "/book/:isbn",
-  passport.authenticate("signup", { session: false }),
+  passport.authenticate("jwt", { session: false }),
   allowOnly(rolesConfig.ACCESS_LEVELS.admin, bookController.update)
 );
 
 router.delete(
   "/book/:isbn",
-  passport.authenticate("signup", { session: false }),
+  passport.authenticate("jwt", { session: false }),
   allowOnly(rolesConfig.ACCESS_LEVELS.admin, bookController.remove)
 );

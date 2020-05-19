@@ -75,7 +75,7 @@ const Header = () => {
           </div>
           <div className="basket-panel d-flex flex-row align-items-center">
             <div className="text-white text-nowrap border-right px-4">
-              {totalSum} $
+              {Number.parseFloat(totalSum.toPrecision(4))} $
             </div>
             <div>
               <Button
