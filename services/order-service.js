@@ -9,7 +9,7 @@ async function getByCustomerId(customerId) {
   let orders = await Order.findAll({ where: { customer_id: customerId } });
   for (const [index, order] of orders.entries()) {
     const orderDetail = await OrderDetail.findAll({
-      where: { order: order.id },
+      where: { order_id: order.id },
     });
     orders[index] = {
       ...orders[index].dataValues,
@@ -27,8 +27,8 @@ async function create({ customer, books }) {
   newOrder = await newOrder.save();
   books.map(async (element) => {
     const newOrderDetail = new OrderDetail({
-      book: element.isbn,
-      order: newOrder.id,
+      book_isbn: element.isbn,
+      order_id: newOrder.id,
       amount: element.amount,
     });
     await newOrderDetail.save();

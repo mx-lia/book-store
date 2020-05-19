@@ -8,15 +8,15 @@ module.exports = {
 
 async function getByCustomerId(customerId) {
   return await FavouriteBook.findAll({
-    where: { customer: customerId },
+    where: { customer_id: customerId },
     include: { all: true },
   });
 }
 
 async function create(bookIsbn, customerId) {
   const favouriteBook = new FavouriteBook({
-    book: bookIsbn,
-    customer: customerId,
+    book_isbn: bookIsbn,
+    customer_id: customerId,
   });
   return await favouriteBook.save();
 }

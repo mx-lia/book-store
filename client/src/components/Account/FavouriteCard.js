@@ -18,11 +18,11 @@ const FavouriteCard = ({ favourite }) => {
 
   useEffect(() => {
     (async () => {
-      const book = await getBook(favourite.book, setError);
+      const book = await getBook(favourite.book_isbn, setError);
       setBook(book);
       setInCart(isInCart(book.isbn));
     })();
-  }, [favourite.book]);
+  }, [favourite.book_isbn]);
 
   return (
     <Container fluid="md" className="px-0 border-top">

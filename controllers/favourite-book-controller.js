@@ -23,6 +23,6 @@ function create(req, res, next) {
 function remove(req, res, next) {
   favouriteBookService
     .remove(req.params.id)
-    .then(() => res.json(result))
+    .then((result) => res.json(result))
     .catch((err) => res.status(500).json({ message: err.message }));
 }

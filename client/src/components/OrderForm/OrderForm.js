@@ -27,7 +27,7 @@ const OrderForm = () => {
     (async () => {
       await setCurrentCustomer();
     })();
-  }, [setCurrentCustomer]);
+  }, []);
 
   return (
     <Formik

@@ -13,11 +13,11 @@ const OrderItem = ({ orderDetail, totalSum, setTotalSum }) => {
 
   useEffect(() => {
     (async () => {
-      const book = await getBook(orderDetail.book, setError);
+      const book = await getBook(orderDetail.book_isbn, setError);
       setBook(book);
       setTotalSum(totalSum + orderDetail.amount * book.price);
     })();
-  }, [orderDetail.book, orderDetail.amount, setTotalSum]);
+  }, [orderDetail.book_isbn, orderDetail.amount, setTotalSum]);
 
   return (
     <React.Fragment>

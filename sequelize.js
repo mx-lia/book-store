@@ -35,75 +35,75 @@ const Review = require("./models/review")(sequelize, Sequelize);
 
 Book.belongsTo(Author, {
   foreignKey: { name: "author_id", allowNull: false },
-  as: "author",
   onDelete: "cascade",
+  onUpdate: "cascade",
 });
 Book.belongsTo(Publisher, {
   foreignKey: { name: "publisher_id", allowNull: false },
-  as: "publisher",
-  onDelete: "cascade",
-});
-Book.belongsToMany(Genre, {
-  foreignKey: { name: "book", allowNull: false },
-  through: BookGenre,
-  unique: false,
-  onDelete: "cascade",
-  onUpdate: "cascade",
-});
-Genre.belongsToMany(Book, {
-  foreignKey: { name: "genre", allowNull: false },
-  through: BookGenre,
-  unique: false,
-  onDelete: "cascade",
-  onUpdate: "cascade",
-});
-Order.belongsTo(Customer, {
-  foreignKey: { name: "customer_id", allowNull: false },
-  as: "customer",
-  onDelete: "cascade",
-});
-Order.belongsToMany(Book, {
-  foreignKey: { name: "order", allowNull: false },
-  through: OrderDetail,
-  unique: false,
-  onDelete: "cascade",
-  onUpdate: "cascade",
-});
-Book.belongsToMany(Order, {
-  foreignKey: { name: "book", allowNull: false },
-  through: OrderDetail,
-  unique: false,
-  onDelete: "cascade",
-  onUpdate: "cascade",
-});
-Customer.belongsToMany(Book, {
-  foreignKey: { name: "customer", allowNull: false },
-  through: FavouriteBook,
-  unique: false,
-  onDelete: "cascade",
-  onUpdate: "cascade",
-});
-Book.belongsToMany(Customer, {
-  foreignKey: { name: "book", allowNull: false },
-  through: FavouriteBook,
-  unique: false,
   onDelete: "cascade",
   onUpdate: "cascade",
 });
 Book.hasOne(BookCover, {
-  foreignKey: { name: "book_isbn", allowNull: false, unique: true },
+  foreignKey: { name: "book_isbn", allowNull: false },
   as: "cover",
   onDelete: "cascade",
+  onUpdate: "cascade",
 });
+
+Book.belongsToMany(Genre, {
+  foreignKey: { name: "book_isbn", allowNull: false },
+  through: BookGenre,
+  onDelete: "cascade",
+  onUpdate: "cascade",
+});
+Genre.belongsToMany(Book, {
+  foreignKey: { name: "genre_id", allowNull: false },
+  through: BookGenre,
+  onDelete: "cascade",
+  onUpdate: "cascade",
+});
+
+Order.belongsTo(Customer, {
+  foreignKey: { name: "customer_id", allowNull: false },
+  onDelete: "cascade",
+  onUpdate: "cascade",
+});
+
+Order.belongsToMany(Book, {
+  foreignKey: { name: "order_id", allowNull: false },
+  through: OrderDetail,
+  onDelete: "cascade",
+  onUpdate: "cascade",
+});
+Book.belongsToMany(Order, {
+  foreignKey: { name: "book_isbn", allowNull: false },
+  through: OrderDetail,
+  onDelete: "cascade",
+  onUpdate: "cascade",
+});
+
+Customer.belongsToMany(Book, {
+  foreignKey: { name: "customer_id", allowNull: false },
+  through: FavouriteBook,
+  onDelete: "cascade",
+  onUpdate: "cascade",
+});
+Book.belongsToMany(Customer, {
+  foreignKey: { name: "book_isbn", allowNull: false },
+  through: FavouriteBook,
+  onDelete: "cascade",
+  onUpdate: "cascade",
+});
+
 Review.belongsTo(Book, {
   foreignKey: { name: "book_isbn", allowNull: false },
-  as: "book",
   onDelete: "cascade",
+  onUpdate: "cascade",
 });
 Review.belongsTo(Customer, {
   foreignKey: { name: "customer_id", allowNull: false },
-  as: "customer",
   onDelete: "cascade",
+  onUpdate: "cascade",
 });
 
 Customer.prototype.isValidPassword = async function (password) {

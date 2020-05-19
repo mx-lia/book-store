@@ -229,9 +229,9 @@ async function create(book, files) {
   newBook = await newBook.save();
   Array.isArray(book.genres)
     ? book.genres.map(
-        async (id) => await BookGenre.create({ book: newBook.isbn, genre: id })
+        async (id) => await BookGenre.create({ book_isbn: newBook.isbn, genre_id: id })
       )
-    : await BookGenre.create({ book: newBook.isbn, genre: book.genres });
+    : await BookGenre.create({ book_isbn: newBook.isbn, genre_id: book.genres });
   if (files) {
     await BookCover.create({
       contentType: files.cover.mimetype,
@@ -245,12 +245,12 @@ async function create(book, files) {
 async function update(isbn, updatedBook, files) {
   const book = await Book.findByPk(isbn);
   Object.assign(book, updatedBook);
-  await BookGenre.destroy({ where: { book: book.isbn } });
+  await BookGenre.destroy({ where: { book_isbn: book.isbn } });
   Array.isArray(updatedBook.genres)
     ? updatedBook.genres.map((genre) =>
-        BookGenre.create({ genre: genre, book: book.isbn })
+        BookGenre.create({ genre_id: genre, book_isbn: book.isbn })
       )
-    : BookGenre.create({ genre: updatedBook.genres, book: book.isbn });
+    : BookGenre.create({ genre_id: updatedBook.genres, book_isbn: book.isbn });
   await book.save();
   if (files) {
     const cover = await BookCover.findOne({ where: { book_isbn: book.isbn } });
