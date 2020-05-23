@@ -16,7 +16,7 @@ module.exports = (sequelize, type) => {
         },
       },
       text: {
-        type: type.STRING,
+        type: type.TEXT,
         allowNull: false,
       },
     },

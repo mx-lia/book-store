@@ -20,7 +20,7 @@ const OrderCheckout = () => {
               <h5 className="text-light">Order Summary</h5>
               <div className="d-flex flex-row justify-content-between text-white">
                 <div>{totalCount} items</div>
-                <div>{totalSum} $</div>
+                <div>{Number.parseFloat(totalSum.toPrecision(4))} $</div>
               </div>
             </div>
             <div className="p-3">
@@ -37,12 +37,12 @@ const OrderCheckout = () => {
                     </div>
                     <div>x {element.quantity}</div>
                   </div>
-                  <div>{element.quantity * element.book.price} $</div>
+                  <div>{Number.parseFloat((Number.parseFloat(element.book.price.toPrecision(4)) * element.quantity).toPrecision(4))} $</div>
                 </div>
               ))}
               <div className="d-flex flex-row justify-content-between py-1 border-bottom">
                 <div>Sub-total</div>
-                <div>{totalSum} $</div>
+                <div>{Number.parseFloat(totalSum.toPrecision(4))} $</div>
               </div>
               <div className="d-flex flex-row justify-content-between py-1 border-bottom">
                 <div>Delivery</div>
@@ -50,7 +50,7 @@ const OrderCheckout = () => {
               </div>
               <div className="d-flex flex-row justify-content-between py-1">
                 <div>Total</div>
-                <div>{totalSum} $</div>
+                <div>{Number.parseFloat(totalSum.toPrecision(4))} $</div>
               </div>
             </div>
           </div>

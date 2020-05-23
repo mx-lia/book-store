@@ -17,6 +17,10 @@ passport.use(
     },
     async (req, email, password, done) => {
       try {
+        if(await customerService.getByEmail(email))
+        {
+          return req.res.status(500).json({ message: "User with such email is already exist in system. Use Sign In form." });
+        }
         const customer = await customerService.create({
           firstName: req.body.firstName,
           lastName: req.body.lastName,

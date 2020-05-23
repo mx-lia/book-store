@@ -10,7 +10,7 @@ const PaginationComponent = ({ currentPage, pages }) => {
   return (
     <Pagination className="m-0 justify-content-end" size="sm">
       <Pagination.First
-        disabled={currentPage === 1 ? true : false}
+        disabled={currentPage == 1 ? true : false}
         href={
           location.pathname +
           "?" +
@@ -21,7 +21,7 @@ const PaginationComponent = ({ currentPage, pages }) => {
         }
       />
       <Pagination.Prev
-        disabled={currentPage === 1 ? true : false}
+        disabled={currentPage == 1 ? true : false}
         href={
           location.pathname +
           "?" +
@@ -34,7 +34,7 @@ const PaginationComponent = ({ currentPage, pages }) => {
       {pages.map((element) => (
         <Pagination.Item
           key={element}
-          active={element === currentPage ? true : false}
+          active={element == currentPage ? true : false}
           href={
             location.pathname +
             "?" +
@@ -48,7 +48,7 @@ const PaginationComponent = ({ currentPage, pages }) => {
         </Pagination.Item>
       ))}
       <Pagination.Next
-        disabled={currentPage === pages.length ? true : false}
+        disabled={currentPage == pages.length ? true : false}
         href={
           location.pathname +
           "?" +
@@ -59,7 +59,7 @@ const PaginationComponent = ({ currentPage, pages }) => {
         }
       />
       <Pagination.Last
-        disabled={currentPage === pages.length ? true : false}
+        disabled={currentPage == pages.length ? true : false}
         href={
           location.pathname +
           "?" +

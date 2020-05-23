@@ -21,10 +21,10 @@ async function getAll(
 ) {
   switch (orderBy) {
     case "pubdate_old_new":
-      orderBy = ["publication_date", "DESC"];
+      orderBy = ["publication_date", "ASC"];
       break;
     case "pubdate_new_old":
-      orderBy = ["publication_date", "ASC"];
+      orderBy = ["publication_date", "DESC"];
       break;
     case "price_high_low":
       orderBy = ["price", "DESC"];
@@ -42,7 +42,7 @@ async function getAll(
       price = { [Op.lt]: 15 };
       break;
     case "med":
-      price = { [Op.in]: [15, 30] };
+      price = { [Op.gte]: 15, [Op.lte]: 30 };
       break;
     case "high":
       price = { [Op.gt]: 30 };

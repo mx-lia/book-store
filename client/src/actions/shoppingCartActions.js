@@ -29,8 +29,10 @@ export const removeItem = (dispatch, setError) => (book) => {
   try {
     dispatch({ type: "REMOVE_ITEM_LOADING" });
     let booksInCart = JSON.parse(localStorage.getItem("shoppingCart"));
+    let deletedAmount;
     booksInCart = booksInCart
       ? booksInCart.filter((value) => {
+          if (value.book.isbn === book.isbn) deletedAmount = value.quantity;
           return value.book.isbn !== book.isbn;
         })
       : booksInCart;
@@ -38,7 +40,8 @@ export const removeItem = (dispatch, setError) => (book) => {
     dispatch({
       type: "REMOVE_ITEM_SUCCESS",
       payload: booksInCart,
-      price: book.price,
+      amount: deletedAmount,
+      price: book.price * deletedAmount,
     });
   } catch (err) {
     setError(err.message);

@@ -13,7 +13,7 @@ const ShoppingCartReducer = (state, action) => {
       return {
         ...state,
         books: action.payload,
-        totalCount: state.totalCount - 1,
+        totalCount: state.totalCount - action.amount,
         totalSum:
           Number.parseFloat(state.totalSum.toPrecision(4)) -
           Number.parseFloat(action.price.toPrecision(4)),
