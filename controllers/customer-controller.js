@@ -19,7 +19,7 @@ function authentificate(req, res, next) {
       const body = { id: customer.id, role: customer.role };
       const token = jwt.sign({ user: body }, JWT_SECRET);
       let options = {
-        maxAge: 1000 * 60 * 30,
+        maxAge: 1000 * 60 * 120,
         httpOnly: true,
         signed: false,
       };

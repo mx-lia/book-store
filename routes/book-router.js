@@ -11,6 +11,8 @@ module.exports = router;
 
 router.get("/books", bookController.getAll);
 
+router.get("/books/count", bookController.getCount);
+
 router.get("/book/:isbn", bookController.getByIsbn);
 
 router.post(

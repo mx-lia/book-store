@@ -5,6 +5,7 @@ const { Op } = require("sequelize");
 module.exports = {
   getAll,
   getByIsbn,
+  getCount,
   create,
   update,
   remove,
@@ -224,14 +225,27 @@ async function getByIsbn(isbn) {
   });
 }
 
+async function getCount() {
+  const books = await Book.findAndCountAll();
+  return {
+    all: books.count,
+    available: books.rows.filter((book) => book.availableQuantity > 0).length,
+    notAvailable: books.rows.filter((book) => book.availableQuantity === 0).length,
+  };
+}
+
 async function create(book, files) {
   let newBook = new Book(book);
   newBook = await newBook.save();
   Array.isArray(book.genres)
     ? book.genres.map(
-        async (id) => await BookGenre.create({ book_isbn: newBook.isbn, genre_id: id })
+        async (id) =>
+          await BookGenre.create({ book_isbn: newBook.isbn, genre_id: id })
       )
-    : await BookGenre.create({ book_isbn: newBook.isbn, genre_id: book.genres });
+    : await BookGenre.create({
+        book_isbn: newBook.isbn,
+        genre_id: book.genres,
+      });
   if (files) {
     await BookCover.create({
       contentType: files.cover.mimetype,

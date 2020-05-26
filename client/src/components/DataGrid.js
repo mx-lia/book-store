@@ -8,7 +8,7 @@ import { Badge, Table } from "react-bootstrap";
 
 import Pagination from "./Pagination";
 
-import { getBooks } from "../actions/bookActions";
+import { getBooks, getCount } from "../actions/bookActions";
 import NoResults from "./NoResults";
 
 const DataGrid = ({
@@ -25,23 +25,30 @@ const DataGrid = ({
 
   useEffect(() => {
     (async () => {
-      const { books, count, pages } = await getBooks({
-        limit: 15,
-        page: currentPage,
-        genre: params.genre,
-        orderBy: params.orderBy,
-      }, setError);
+      const { books, pages } = await getBooks(
+        {
+          limit: 15,
+          page: currentPage,
+          genre: params.genre,
+          orderBy: params.orderBy,
+        },
+        setError
+      );
+      const { all, available, notAvailable } = await getCount(setError);
       setBooks(books);
-      setTotalCount(count);
-      setAvailableCount(
-        books.filter((book) => book.availableQuantity > 0).length
-      );
-      setNotAvailableCount(
-        books.filter((book) => book.availableQuantity === 0).length
-      );
+      setTotalCount(all);
+      setAvailableCount(available);
+      setNotAvailableCount(notAvailable);
       setPages(pages);
     })();
-  }, [currentPage, params.genre, params.orderBy, setAvailableCount, setNotAvailableCount, setTotalCount]);
+  }, [
+    currentPage,
+    params.genre,
+    params.orderBy,
+    setAvailableCount,
+    setNotAvailableCount,
+    setTotalCount,
+  ]);
 
   return (
     <div>

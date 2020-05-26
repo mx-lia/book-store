@@ -57,6 +57,15 @@ export const getBooks = async (params, setError) => {
   }
 };
 
+export const getCount = async (setError) => {
+  try {
+    const res = await serverCall(`/books/count`);
+    return res;
+  } catch (err) {
+    setError(err);
+  }
+};
+
 export const getBook = async (isbn, setError) => {
   try {
     const res = await serverCall(`/book/${isbn}`);

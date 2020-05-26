@@ -3,6 +3,7 @@ const bookService = require("../services/book-service");
 module.exports = {
   getAll,
   getByIsbn,
+  getCount,
   create,
   update,
   remove,
@@ -27,6 +28,13 @@ function getByIsbn(req, res, next) {
   bookService
     .getByIsbn(req.params.isbn)
     .then((book) => res.json(book))
+    .catch((err) => res.status(500).json({ message: err.message }));
+}
+
+function getCount(req, res, next) {
+  bookService
+    .getCount()
+    .then((result) => res.json(result))
     .catch((err) => res.status(500).json({ message: err.message }));
 }
 
